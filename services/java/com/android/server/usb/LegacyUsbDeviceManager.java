@@ -199,7 +199,12 @@ public class LegacyUsbDeviceManager extends UsbDeviceManager {
 
         if (volumes.length > 0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (Settings.Secure.getInt(mContentResolver, Settings.Secure.USB_MASS_STORAGE_ENABLED, 0 ) == 1 ) {
+=======
+            if (Settings.Secure.getInt(mContentResolver,
+                    Settings.Secure.USB_MASS_STORAGE_ENABLED, 0 ) == 1 ) {
+>>>>>>> da81056... Squash UMS Commits [1/3]
 =======
             if (Settings.Secure.getInt(mContentResolver,
                     Settings.Secure.USB_MASS_STORAGE_ENABLED, 0 ) == 1 ) {
@@ -315,7 +320,11 @@ public class LegacyUsbDeviceManager extends UsbDeviceManager {
                         mConfigured = false;
                     } catch (FileNotFoundException f) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                         Slog.i(TAG, "This kernel does not have legacy USB configuration switch support");
+=======
+                        Slog.i(TAG, "Kernel doesn't have legacy USB config switch support");
+>>>>>>> da81056... Squash UMS Commits [1/3]
 =======
                         Slog.i(TAG, "Kernel doesn't have legacy USB config switch support");
 >>>>>>> da81056... Squash UMS Commits [1/3]
@@ -534,7 +543,12 @@ public class LegacyUsbDeviceManager extends UsbDeviceManager {
             switch (msg.what) {
                 case MSG_UPDATE_STATE:
 <<<<<<< HEAD
+<<<<<<< HEAD
                     if (DEBUG) Slog.d(TAG, "Got MSG_UPDATE_STATE. Connected="+msg.arg1+" Configured="+msg.arg2);
+=======
+                    if (DEBUG) Slog.d(TAG, "Got MSG_UPDATE_STATE. Connected="
+                            +msg.arg1+" Configured="+msg.arg2);
+>>>>>>> da81056... Squash UMS Commits [1/3]
 =======
                     if (DEBUG) Slog.d(TAG, "Got MSG_UPDATE_STATE. Connected="
                             +msg.arg1+" Configured="+msg.arg2);
@@ -584,7 +598,12 @@ public class LegacyUsbDeviceManager extends UsbDeviceManager {
         private void updateUsbNotification() {
             if (mNotificationManager == null || !mUseUsbNotification) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 if(DEBUG && mNotificationManager == null) Slog.d(TAG, "mNotificationManager == null");
+=======
+                if(DEBUG && mNotificationManager == null) Slog.d(TAG,
+                        "mNotificationManager == null");
+>>>>>>> da81056... Squash UMS Commits [1/3]
 =======
                 if(DEBUG && mNotificationManager == null) Slog.d(TAG,
                         "mNotificationManager == null");
@@ -600,17 +619,23 @@ public class LegacyUsbDeviceManager extends UsbDeviceManager {
                 } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_PTP)) {
                     id = com.android.internal.R.string.usb_ptp_notification_title;
 <<<<<<< HEAD
+<<<<<<< HEAD
                 } /* else if (containsFunction(mCurrentFunctions,
                         UsbManager.USB_FUNCTION_MASS_STORAGE)) { // Disable this as it causes double USB settings menues when in UMS mode.
                     id = com.android.internal.R.string.usb_cd_installer_notification_title;
                 } */ else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ACCESSORY)) {
 =======
+=======
+>>>>>>> da81056... Squash UMS Commits [1/3]
                 /*} else if (containsFunction(mCurrentFunctions,
                         UsbManager.USB_FUNCTION_MASS_STORAGE)) {
                     // Disable this as it causes double USB settings menues when in UMS mode.
                     id = com.android.internal.R.string.usb_cd_installer_notification_title; */
                 } else if (containsFunction(mCurrentFunctions,
                         UsbManager.USB_FUNCTION_ACCESSORY)) {
+<<<<<<< HEAD
+>>>>>>> da81056... Squash UMS Commits [1/3]
+=======
 >>>>>>> da81056... Squash UMS Commits [1/3]
                     id = com.android.internal.R.string.usb_accessory_notification_title;
                 } else {

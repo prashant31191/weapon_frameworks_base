@@ -1163,7 +1163,12 @@ class MountService extends IMountService.Stub
                             if (getVolumeState(path).equals(Environment.MEDIA_SHARED)) {
                                 doShareUnshareVolume(path, "ums", false);
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 if ((rc = doMountVolume(path)) != StorageResultCode.OperationSucceeded) {
+=======
+                                if ((rc = doMountVolume(path))
+                                        != StorageResultCode.OperationSucceeded) {
+>>>>>>> da81056... Squash UMS Commits [1/3]
 =======
                                 if ((rc = doMountVolume(path))
                                         != StorageResultCode.OperationSucceeded) {

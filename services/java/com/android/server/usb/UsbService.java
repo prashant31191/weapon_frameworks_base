@@ -79,8 +79,13 @@ public class UsbService extends IUsbManager.Stub {
         if (new File("/sys/class/android_usb").exists()) {
             mDeviceManager = new UsbDeviceManager(context);
 <<<<<<< HEAD
+<<<<<<< HEAD
         }
         else if(new File(Resources.getSystem().getString(com.android.internal.R.string.config_legacyUmsLunFile)).exists())
+=======
+        } else if (new File(Resources.getSystem()
+                .getString(com.android.internal.R.string.config_legacyUmsLunFile)).exists())
+>>>>>>> da81056... Squash UMS Commits [1/3]
 =======
         } else if (new File(Resources.getSystem()
                 .getString(com.android.internal.R.string.config_legacyUmsLunFile)).exists())
