@@ -121,7 +121,8 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
+public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
+        NetworkController.UpdateUIListener {
     static final String TAG = "PhoneStatusBar";
     public static final boolean DEBUG = BaseStatusBar.DEBUG;
     public static final boolean SPEW = false;
@@ -829,6 +830,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         // listen for USER_SETUP_COMPLETE setting (per-user)
         resetUserSetupObserver();
 
+<<<<<<< HEAD
+=======
+        mNotificationShortcutsLayout.setupShortcuts();
+
+        mBattery = (BatteryMeterView) mStatusBarView.findViewById(R.id.battery);
+        mCircleBattery = (BatteryCircleMeterView) mStatusBarView.findViewById(R.id.circle_battery);
+        updateBatteryIcons();
+
+        mNetworkController.setListener(this);
+
+>>>>>>> 288e3ec... UI not updated correctly in expanded statusbar
         return mStatusBarView;
     }
 
@@ -1282,8 +1294,22 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         }
     }
 
+<<<<<<< HEAD
     protected void updateCarrierLabelVisibility(boolean force) {
         if (!mShowCarrierInPanel) return;
+=======
+    /**
+     * Listen for UI updates and refresh layout.
+     */
+    public void onUpdateUI() {
+        updateCarrierAndWifiLabelVisibility(true, false);
+    }
+
+    protected void updateCarrierAndWifiLabelVisibility(boolean force, boolean forceHide) {
+        if (!mShowCarrierInPanel || mCarrierAndWifiView == null) {
+            return;
+        }
+>>>>>>> 288e3ec... UI not updated correctly in expanded statusbar
         // The idea here is to only show the carrier label when there is enough room to see it,
         // i.e. when there aren't enough notifications to fill the panel.
         if (SPEW) {
