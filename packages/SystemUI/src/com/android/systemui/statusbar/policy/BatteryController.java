@@ -27,6 +27,13 @@ import com.android.systemui.BatteryMeterView.BatteryMeterMode;
 import java.util.ArrayList;
 
 public class BatteryController extends BroadcastReceiver {
+<<<<<<< HEAD
+=======
+    private static final String TAG = "StatusBar.BatteryController";
+
+    private int mLevel = 0;
+    private boolean mPluggedIn;
+>>>>>>> 284f891... Frameworks: Fix 0% battery QS tile
 
     protected ArrayList<BatteryStateChangeCallback> mChangeCallbacks =
             new ArrayList<BatteryStateChangeCallback>();
@@ -59,9 +66,18 @@ public class BatteryController extends BroadcastReceiver {
         mChangeCallbacks.remove(cb);
     }
 
+    public int getBatteryLevel() {
+        return mLevel;
+    }
+
+    public boolean isBatteryStatusCharging() {
+        return mPluggedIn;
+    }
+
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
         if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
+<<<<<<< HEAD
             mBatteryPresent = intent.getBooleanExtra(BatteryManager.EXTRA_PRESENT, true);
             mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
             mBatteryPlugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0;
@@ -71,6 +87,22 @@ public class BatteryController extends BroadcastReceiver {
             for (BatteryStateChangeCallback cb : mChangeCallbacks) {
                 cb.onBatteryLevelChanged(mBatteryPresent, mBatteryLevel, mBatteryPlugged,
                         mBatteryStatus);
+=======
+            mLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+            final int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
+                    BatteryManager.BATTERY_STATUS_UNKNOWN);
+
+            mPluggedIn = false;
+            switch (status) {
+                case BatteryManager.BATTERY_STATUS_CHARGING:
+                case BatteryManager.BATTERY_STATUS_FULL:
+                    mPluggedIn = true;
+                    break;
+            }
+
+            for (BatteryStateChangeCallback cb : mChangeCallbacks) {
+                cb.onBatteryLevelChanged(mLevel, mPluggedIn);
+>>>>>>> 284f891... Frameworks: Fix 0% battery QS tile
             }
         }
     }

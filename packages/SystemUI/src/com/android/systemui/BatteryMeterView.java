@@ -569,14 +569,12 @@ public class BatteryMeterView extends View implements DemoMode {
             mWarningTextHeight = -mWarningTextPaint.getFontMetrics().ascent;
         }
 
-<<<<<<< HEAD
         private float[] loadBoltPoints(Resources res) {
             final int[] pts = res.getIntArray(getBoltPointsArrayResource());
             int maxX = 0, maxY = 0;
             for (int i = 0; i < pts.length; i += 2) {
                 maxX = Math.max(maxX, pts[i]);
                 maxY = Math.max(maxY, pts[i + 1]);
-=======
     public void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
 
@@ -623,7 +621,6 @@ public class BatteryMeterView extends View implements DemoMode {
                 lp = new LinearLayout.LayoutParams((int) width, (int) height);
                 lp.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
                 setLayoutParams(lp);
->>>>>>> f2366b0... fb: add bottom margin to stock default battery icon
             }
             final float[] ptsF = new float[pts.length];
             for (int i = 0; i < pts.length; i += 2) {
