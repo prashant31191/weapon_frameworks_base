@@ -25,12 +25,9 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-<<<<<<< HEAD
 import android.hardware.input.InputManager;
-=======
 import android.os.RemoteException;
 import android.os.ServiceManager;
->>>>>>> 0294fe6... fb: handle for our navigation bar recentspreload in the button
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -47,13 +44,10 @@ import android.view.ViewDebug;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 
-<<<<<<< HEAD
-=======
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.util.slim.ButtonsConstants;
 import com.android.internal.util.slim.SlimActions;
 
->>>>>>> 0294fe6... fb: handle for our navigation bar recentspreload in the button
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.NavbarEditor;
 import com.android.systemui.statusbar.phone.NavbarEditor.ButtonInfo;
@@ -314,7 +308,6 @@ public class KeyButtonView extends ImageView {
                 //Log.d("KeyButtonView", "press");
                 mDownTime = SystemClock.uptimeMillis();
                 setPressed(true);
-<<<<<<< HEAD
                 if (mCode != 0) {
                     sendEvent(KeyEvent.ACTION_DOWN, 0, mDownTime);
                 } else {
@@ -322,7 +315,6 @@ public class KeyButtonView extends ImageView {
                     performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 }
                 if (supportsLongPress()) {
-=======
                 if (!sPreloadedRecentApps
                         && (mClickAction != null
                                 && mClickAction.equals(ButtonsConstants.ACTION_RECENTS)
@@ -331,7 +323,6 @@ public class KeyButtonView extends ImageView {
                     preloadRecentApps();
                 }
                 if (mSupportsLongpress) {
->>>>>>> 0294fe6... fb: handle for our navigation bar recentspreload in the button
                     removeCallbacks(mCheckLongPress);
                     postDelayed(mCheckLongPress, ViewConfiguration.getLongPressTimeout());
                 }
@@ -380,7 +371,6 @@ public class KeyButtonView extends ImageView {
         return true;
     }
 
-<<<<<<< HEAD
     void sendEvent(int action, int flags) {
         sendEvent(action, flags, SystemClock.uptimeMillis());
     }
@@ -395,7 +385,6 @@ public class KeyButtonView extends ImageView {
                 InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
     }
 }
-=======
     private OnClickListener mClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -433,7 +422,6 @@ public class KeyButtonView extends ImageView {
             mStatusBarService = null;
         }
     }
->>>>>>> 0294fe6... fb: handle for our navigation bar recentspreload in the button
 
     private void cancelPreloadRecentApps() {
         if (sPreloadedRecentApps) {

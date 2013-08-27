@@ -1185,18 +1185,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private void prepareNavigationBarView() {
         mNavigationBarView.reorient();
-<<<<<<< HEAD
         mNavigationBarView.setListeners(mRecentsClickListener,
                 mRecentsPreloadOnTouchListener, mHomeSearchActionListener);
-=======
-
         View home = mNavigationBarView.getHomeButton();
         if (home != null) {
             home.setOnTouchListener(mHomeSearchActionListener);
         }
         mNavigationBarView.getSearchLight().setOnTouchListener(mHomeSearchActionListener);
         setDisableHomeLongpress();
->>>>>>> 0294fe6... fb: handle for our navigation bar recentspreload in the button
         updateSearchPanel();
     }
 
