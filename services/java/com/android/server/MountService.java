@@ -1162,17 +1162,11 @@ class MountService extends IMountService.Stub
                         for (String path : volumes) {
                             if (getVolumeState(path).equals(Environment.MEDIA_SHARED)) {
                                 doShareUnshareVolume(path, "ums", false);
-<<<<<<< HEAD
-<<<<<<< HEAD
                                 if ((rc = doMountVolume(path)) != StorageResultCode.OperationSucceeded) {
-=======
                                 if ((rc = doMountVolume(path))
                                         != StorageResultCode.OperationSucceeded) {
->>>>>>> da81056... Squash UMS Commits [1/3]
-=======
                                 if ((rc = doMountVolume(path))
                                         != StorageResultCode.OperationSucceeded) {
->>>>>>> da81056... Squash UMS Commits [1/3]
                                     Slog.e(TAG, String.format(
                                             "Failed to remount {%s} on UMS enabled-disconnect (%d)",
                                                     path, rc));

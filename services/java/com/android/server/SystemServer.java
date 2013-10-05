@@ -28,7 +28,10 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
+<<<<<<< HEAD
 import android.database.Cursor;
+=======
+>>>>>>> c4bf638... [1/2] base: Add support for ADB over network
 import android.media.AudioService;
 import android.net.wifi.p2p.WifiP2pService;
 import android.os.Environment;
@@ -109,6 +112,7 @@ class ServerThread {
         }
     }
 
+<<<<<<< HEAD
     private class PerformanceProfileObserver extends ContentObserver {
         private final String mPropName;
         private final String mPropDef;
@@ -135,6 +139,8 @@ class ServerThread {
         }
     }
 
+=======
+>>>>>>> c4bf638... [1/2] base: Add support for ADB over network
     public void initAndLoop() {
         EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_SYSTEM_RUN,
             SystemClock.uptimeMillis());
@@ -924,6 +930,14 @@ class ServerThread {
             // Sync the system property with the current setting
             observer.setSystemSetting();
         }
+
+        Settings.Secure.putInt(mContentResolver, Settings.Secure.ADB_PORT,
+                Integer.parseInt(SystemProperties.get("service.adb.tcp.port", "-1")));
+
+        // register observer to listen for settings changes
+        mContentResolver.registerContentObserver(
+                Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
+                false, new AdbPortObserver());
 
         // Before things start rolling, be sure we have decided whether
         // we are in safe mode.
