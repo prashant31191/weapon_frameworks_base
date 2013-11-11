@@ -2630,8 +2630,6 @@ public final class Settings {
         public static final String LOCKSCREEN_TARGETS = "lockscreen_targets";
 
         /**
-<<<<<<< HEAD
-=======
          * Whether phone lockscreen uses 5 or 8 targets
          * @hide
          */
@@ -2684,7 +2682,6 @@ public final class Settings {
         public static final String LOCKSCREEN_GLOWPAD_TORCH = "lockscreen_glowpad_torch";
 
         /**
->>>>>>> 1f690f7... Framework: Glowpad Torch (1/3)
          * @deprecated Use {@link android.provider.Settings.Global#LOW_BATTERY_SOUND}
          * instead
          * @hide

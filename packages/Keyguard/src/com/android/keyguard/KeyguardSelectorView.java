@@ -51,25 +51,21 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Slog;
 import android.view.View;
-<<<<<<< HEAD
 import android.widget.LinearLayout;
-
 import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.util.cm.LockscreenTargetUtils;
-=======
 import android.view.ViewConfiguration;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.android.internal.telephony.IccCardConstants.State;
-import com.android.internal.util.slim.AppHelper;
-import com.android.internal.util.slim.LockscreenTargetUtils;
-import com.android.internal.util.slim.DeviceUtils;
-import com.android.internal.util.slim.SlimActions;
-import com.android.internal.util.slim.TorchConstants;
+import com.android.internal.util.weaponx.AppHelper;
+import com.android.internal.util.weaponx.LockscreenTargetUtils;
+import com.android.internal.util.weaponx.DeviceUtils;
+import com.android.internal.util.weaponx.weaponxActions;
+import com.android.internal.util.weaponx.TorchConstants;
 import com.android.internal.view.RotationPolicy;
->>>>>>> 1f690f7... Framework: Glowpad Torch (1/3)
 import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.multiwaveview.GlowPadView;
 import com.android.internal.widget.multiwaveview.GlowPadView.OnTriggerListener;
@@ -100,11 +96,8 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
     private Drawable mBouncerFrame;
     private String[] mStoredTargets;
     private int mTargetOffset;
-<<<<<<< HEAD
     private boolean mIsScreenLarge;
-=======
     private int mTaps;
->>>>>>> 1f690f7... Framework: Glowpad Torch (1/3)
 
     OnTriggerListener mOnTriggerListener = new OnTriggerListener() {
 
@@ -174,8 +167,6 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
 
         }
 
-<<<<<<< HEAD
-=======
         public void onTargetChange(View v, int target) {
             if (target != -1) {
                 killGlowpadTorch();
@@ -188,7 +179,6 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
             }
         }
 
->>>>>>> 1f690f7... Framework: Glowpad Torch (1/3)
         public void onFinishFinalAnimation() {
 
         }
@@ -255,9 +245,6 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
 
         mSecurityMessageDisplay = new KeyguardMessageArea.Helper(this);
         View bouncerFrameView = findViewById(R.id.keyguard_selector_view_frame);
-<<<<<<< HEAD
-        mBouncerFrame = bouncerFrameView.getBackground();
-=======
         mBouncerFrame =
                 KeyguardSecurityViewHelper.colorizeFrame(
                 mContext, bouncerFrameView.getBackground());
@@ -282,7 +269,6 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
                 mContext.getContentResolver(),
                 Settings.System.LOCKSCREEN_GLOWPAD_TORCH, 0,
                 UserHandle.USER_CURRENT) == 1;
->>>>>>> 1f690f7... Framework: Glowpad Torch (1/3)
     }
 
     public void setCarrierArea(View carrierArea) {
