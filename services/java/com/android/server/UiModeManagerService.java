@@ -82,12 +82,9 @@ final class UiModeManagerService extends IUiModeManager.Stub {
     private boolean mComputedNightMode;
     private int mCurUiMode = 0;
     private int mSetUiMode = 0;
-<<<<<<< HEAD
-=======
     private int mSetUiThemeMode = 0;
     private boolean mAllowConfigChange = true;
     private float mCurrentSwitchLevel = DARK_CONDITION;
->>>>>>> ded44fe... fb: TRDS change auto detect light conditions method
 
     private boolean mHoldingConfiguration = false;
     private Configuration mConfiguration = new Configuration();
@@ -201,8 +198,6 @@ final class UiModeManagerService extends IUiModeManager.Stub {
         mTwilightService.registerListener(mTwilightListener, mHandler);
     }
 
-<<<<<<< HEAD
-=======
     private void updateUiThemeMode() {
         mUiThemeAutoMode = Settings.Secure.getIntForUser(
                 mContext.getContentResolver(),
@@ -267,7 +262,6 @@ final class UiModeManagerService extends IUiModeManager.Stub {
     }
 
 
->>>>>>> ded44fe... fb: TRDS change auto detect light conditions method
     @Override // Binder call
     public void disableCarMode(int flags) {
         final long ident = Binder.clearCallingIdentity();
