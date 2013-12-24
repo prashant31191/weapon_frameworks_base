@@ -830,8 +830,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         // listen for USER_SETUP_COMPLETE setting (per-user)
         resetUserSetupObserver();
 
-<<<<<<< HEAD
-=======
         mNotificationShortcutsLayout.setupShortcuts();
 
         mBattery = (BatteryMeterView) mStatusBarView.findViewById(R.id.battery);
@@ -840,7 +838,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         mNetworkController.setListener(this);
 
->>>>>>> 288e3ec... UI not updated correctly in expanded statusbar
         return mStatusBarView;
     }
 
@@ -1294,10 +1291,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     }
 
-<<<<<<< HEAD
     protected void updateCarrierLabelVisibility(boolean force) {
         if (!mShowCarrierInPanel) return;
-=======
     /**
      * Listen for UI updates and refresh layout.
      */
@@ -1309,7 +1304,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (!mShowCarrierInPanel || mCarrierAndWifiView == null) {
             return;
         }
->>>>>>> 288e3ec... UI not updated correctly in expanded statusbar
         // The idea here is to only show the carrier label when there is enough room to see it,
         // i.e. when there aren't enough notifications to fill the panel.
         if (SPEW) {
