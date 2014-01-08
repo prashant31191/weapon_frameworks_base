@@ -30,8 +30,26 @@ public class QSConstants {
         public static final String TILE_QUIETHOURS = "toggleQuietHours";
         public static final String TILE_VOLUME = "toggleVolume";
         public static final String TILE_EXPANDEDDESKTOP = "toggleExpandedDesktop";
+<<<<<<< HEAD:core/java/com/android/internal/util/cm/QSConstants.java
         public static final String TILE_CAMERA = "toggleCamera";
         public static final String TILE_NETWORKADB = "toggleNetworkAdb";
+=======
+        public static final String TILE_MUSIC = "toggleMusic";
+        public static final String TILE_REBOOT = "toggleReboot";
+        public static final String TILE_THEME = "toggleTheme";
+        public static final String TILE_CUSTOM = "toggleCustom";
+        public static final String TILE_CONTACT = "tileContact";
+
+        // dynamic tiles
+        public static final String TILE_ALARM = "toggleAlarm";
+        public static final String TILE_BUGREPORT = "toggleBugReport";
+        public static final String TILE_IMESWITCHER = "toggleImeSwitcher";
+        public static final String TILE_USBTETHER = "toggleUsbTether";
+
+        //Key for custom tile additive
+        public static final String TILE_CUSTOM_KEY = " Key=";
+        public static final String TILE_CUSTOM_DELIMITER = " =action= ";
+>>>>>>> 6d36e8e... Frameworks: Favorite Contact Tile (1/2):core/java/com/android/internal/util/slim/QSConstants.java
 
         public static final String TILE_DELIMITER = "|";
         public static ArrayList<String> TILES_DEFAULT = new ArrayList<String>();

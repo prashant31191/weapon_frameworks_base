@@ -16,6 +16,7 @@
 
 package com.android.systemui.statusbar.phone;
 
+<<<<<<< HEAD
 import static com.android.internal.util.cm.QSConstants.TILES_DEFAULT;
 import static com.android.internal.util.cm.QSConstants.TILE_AIRPLANE;
 import static com.android.internal.util.cm.QSConstants.TILE_AUTOROTATE;
@@ -46,6 +47,45 @@ import static com.android.internal.util.cm.QSConstants.TILE_VOLUME;
 import static com.android.internal.util.cm.QSConstants.TILE_WIFI;
 import static com.android.internal.util.cm.QSConstants.TILE_WIFIAP;
 import static com.android.internal.util.cm.QSConstants.TILE_WIMAX;
+=======
+import static com.android.internal.util.slim.QSConstants.TILES_DEFAULT;
+import static com.android.internal.util.slim.QSConstants.DYNAMIC_TILES_DEFAULT;
+import static com.android.internal.util.slim.QSConstants.TILE_AIRPLANE;
+import static com.android.internal.util.slim.QSConstants.TILE_ALARM;
+import static com.android.internal.util.slim.QSConstants.TILE_AUTOROTATE;
+import static com.android.internal.util.slim.QSConstants.TILE_BATTERY;
+import static com.android.internal.util.slim.QSConstants.TILE_BLUETOOTH;
+import static com.android.internal.util.slim.QSConstants.TILE_BRIGHTNESS;
+import static com.android.internal.util.slim.QSConstants.TILE_BUGREPORT;
+import static com.android.internal.util.slim.QSConstants.TILE_CONTACT;
+import static com.android.internal.util.slim.QSConstants.TILE_CUSTOM;
+import static com.android.internal.util.slim.QSConstants.TILE_CUSTOM_KEY;
+import static com.android.internal.util.slim.QSConstants.TILE_DELIMITER;
+import static com.android.internal.util.slim.QSConstants.TILE_EXPANDEDDESKTOP;
+import static com.android.internal.util.slim.QSConstants.TILE_IMESWITCHER;
+import static com.android.internal.util.slim.QSConstants.TILE_LOCATION;
+import static com.android.internal.util.slim.QSConstants.TILE_LOCKSCREEN;
+import static com.android.internal.util.slim.QSConstants.TILE_LTE;
+import static com.android.internal.util.slim.QSConstants.TILE_MOBILEDATA;
+import static com.android.internal.util.slim.QSConstants.TILE_MUSIC;
+import static com.android.internal.util.slim.QSConstants.TILE_NETWORKMODE;
+import static com.android.internal.util.slim.QSConstants.TILE_NFC;
+import static com.android.internal.util.slim.QSConstants.TILE_QUICKRECORD;
+import static com.android.internal.util.slim.QSConstants.TILE_QUIETHOURS;
+import static com.android.internal.util.slim.QSConstants.TILE_RINGER;
+import static com.android.internal.util.slim.QSConstants.TILE_SCREENTIMEOUT;
+import static com.android.internal.util.slim.QSConstants.TILE_SETTINGS;
+import static com.android.internal.util.slim.QSConstants.TILE_SLEEP;
+import static com.android.internal.util.slim.QSConstants.TILE_SYNC;
+import static com.android.internal.util.slim.QSConstants.TILE_THEME;
+import static com.android.internal.util.slim.QSConstants.TILE_TORCH;
+import static com.android.internal.util.slim.QSConstants.TILE_USBTETHER;
+import static com.android.internal.util.slim.QSConstants.TILE_USER;
+import static com.android.internal.util.slim.QSConstants.TILE_VOLUME;
+import static com.android.internal.util.slim.QSConstants.TILE_WIFI;
+import static com.android.internal.util.slim.QSConstants.TILE_WIFIAP;
+import static com.android.internal.util.slim.QSConstants.TILE_REBOOT;
+>>>>>>> 6d36e8e... Frameworks: Favorite Contact Tile (1/2)
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -70,8 +110,13 @@ import com.android.systemui.quicksettings.BatteryTile;
 import com.android.systemui.quicksettings.BluetoothTile;
 import com.android.systemui.quicksettings.BrightnessTile;
 import com.android.systemui.quicksettings.BugReportTile;
+<<<<<<< HEAD
 import com.android.systemui.quicksettings.CameraTile;
 import com.android.systemui.quicksettings.DockBatteryTile;
+=======
+import com.android.systemui.quicksettings.ContactTile;
+import com.android.systemui.quicksettings.CustomTile;
+>>>>>>> 6d36e8e... Frameworks: Favorite Contact Tile (1/2)
 import com.android.systemui.quicksettings.ExpandedDesktopTile;
 import com.android.systemui.quicksettings.GPSTile;
 import com.android.systemui.quicksettings.InputMethodTile;
@@ -266,6 +311,7 @@ public class QuickSettingsController {
             } else if (tile.equals(TILE_VOLUME)) {
                 qs = new VolumeTile(mContext, this, mHandler);
             } else if (tile.equals(TILE_EXPANDEDDESKTOP)) {
+<<<<<<< HEAD
                 mTileStatusUris.add(Settings.System.getUriFor(Settings.System.EXPANDED_DESKTOP_STYLE));
                 if (QSUtils.expandedDesktopEnabled(resolver)) {
                     qs = new ExpandedDesktopTile(mContext, this, mHandler);
@@ -275,6 +321,21 @@ public class QuickSettingsController {
                 if (QSUtils.adbEnabled(resolver)) {
                     qs = new NetworkAdbTile(mContext, this);
                 }
+=======
+                qs = new ExpandedDesktopTile(mContext, this);
+            } else if (tile.equals(TILE_MUSIC)) {
+                qs = new MusicTile(mContext, this);
+            } else if (tile.equals(TILE_REBOOT)) {
+                qs = new RebootTile(mContext, this);
+            } else if (tile.equals(TILE_THEME)) {
+                qs = new ThemeTile(mContext, this);
+            } else if (tile.equals(TILE_QUICKRECORD)) {
+                qs = new QuickRecordTile(mContext, this);
+            } else if (tile.contains(TILE_CUSTOM)) {
+                qs = new CustomTile(mContext, this, findCustomKey(tile));
+            } else if (tile.contains(TILE_CONTACT)) {
+                qs = new ContactTile(mContext, this, findCustomKey(tile));
+>>>>>>> 6d36e8e... Frameworks: Favorite Contact Tile (1/2)
             }
 
             if (qs != null) {
