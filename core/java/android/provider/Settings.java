@@ -3070,7 +3070,19 @@ public final class Settings {
         public static final String MENU_UNLOCK_SCREEN = "menu_unlock_screen";
 
         /**
+<<<<<<< HEAD
          * Whether to wake the screen with the home key, the value is boolean.
+=======
+         * Quick Settings Collapse Pane
+         *
+         * @hide
+         */
+        public static final String QS_COLLAPSE_PANEL = "qs_collapse_panel";
+
+        /**
+         * Display style of the status bar battery information
+         * default: 0
+>>>>>>> 1b0198b... QuickSettings : Quick Collapse [1/2]
          * @hide
          */
         public static final String HOME_WAKE_SCREEN = "home_wake_screen";
