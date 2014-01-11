@@ -5469,6 +5469,7 @@ public final class Settings {
         public static final String PAYMENT_SERVICE_SEARCH_URI = "payment_service_search_uri";
 
         /**
+<<<<<<< HEAD
          * Whether to allow killing of the foreground app by long-pressing the Back button
          * @hide
          */
@@ -5476,11 +5477,15 @@ public final class Settings {
 
         /**
          * Whether to include options in power menu for rebooting into recovery or bootloader
+=======
+         * Whether to include options in power menu for rebooting into recovery and bootloader
+>>>>>>> 1e96a85... Framework: Add Advanced reboot [1/2]
          * @hide
          */
         public static final String ADVANCED_REBOOT = "advanced_reboot";
 
         /**
+<<<<<<< HEAD
          * Whether to display the 'Wipe data' and 'Force close' options in the notification
          * area and in the recent app list
          * @hide
@@ -5494,6 +5499,8 @@ public final class Settings {
          public static final String PRIVACY_GUARD_DEFAULT = "privacy_guard_default";
 
         /**
+=======
+>>>>>>> 1e96a85... Framework: Add Advanced reboot [1/2]
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
@@ -5545,7 +5552,12 @@ public final class Settings {
             UI_NIGHT_MODE,
             ADVANCED_REBOOT,
             PRIVACY_GUARD_DEFAULT,
+<<<<<<< HEAD
             DEVELOPMENT_SHORTCUT
+=======
+            PRIVACY_GUARD_NOTIFICATION,
+            ADVANCED_REBOOT
+>>>>>>> 1e96a85... Framework: Add Advanced reboot [1/2]
         };
 
         /**
