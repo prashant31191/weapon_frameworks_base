@@ -269,7 +269,11 @@ public class PhoneStatusBarView extends PanelBar {
         }
 
         mBar.animateHeadsUp(mNotificationPanel == panel, mPanelExpandedFractionSum);
+        mBar.panelIsAnimating(mFullyOpenedPanel == null);
 
+<<<<<<< HEAD
         mBar.updateCarrierLabelVisibility(false);
+=======
+>>>>>>> e6ce905... fb: clean up our and AOSP code for wifi and carrier label animation
     }
 }
