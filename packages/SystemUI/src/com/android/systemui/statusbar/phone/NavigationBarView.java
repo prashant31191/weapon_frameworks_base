@@ -487,8 +487,6 @@ public class NavigationBarView extends LinearLayout {
         }
     }
 
-<<<<<<< HEAD
-=======
     protected void disableCameraByUser() {
         Resources keyguardResources;
         PackageManager pm = mContext.getPackageManager();
@@ -517,7 +515,6 @@ public class NavigationBarView extends LinearLayout {
         mCameraDisabledByUser = !cameraWidget || widgetCarousel;
     }
 
->>>>>>> b827d68... fb: disable navigation bar camera button if widget carousel is enabled
     private boolean isCameraDisabledByDpm() {
         final DevicePolicyManager dpm =
                 (DevicePolicyManager) mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);

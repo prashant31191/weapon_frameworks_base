@@ -428,11 +428,14 @@ public class KeyguardHostView extends KeyguardViewBase {
         maybeEnableAddButton();
         checkAppWidgetConsistency();
 
+<<<<<<< HEAD
         // Don't let the user drag the challenge down if widgets are disabled.
         if (mSlidingChallengeLayout != null) {
             mSlidingChallengeLayout.setEnableChallengeDragging(!widgetsDisabled());
         }
 
+=======
+>>>>>>> 678d372... fb: Keyguard disable challenge drag down on slimpin/simpuk screen
         // Select the appropriate page
         mSwitchPageRunnable.run();
 
@@ -1012,6 +1015,11 @@ public class KeyguardHostView extends KeyguardViewBase {
 
         if (mSlidingChallengeLayout != null) {
             mSlidingChallengeLayout.setChallengeInteractive(!fullScreenEnabled);
+            // Don't let the user drag the challenge down if widgets are disabled
+            // or it is a simpin, simpuk or accountswitcher lockscreen
+            mSlidingChallengeLayout.setEnableChallengeDragging(
+                    !isSimOrAccount(securityMode, false)
+                    && (!widgetsDisabled() || mDefaultAppWidgetAttached));
         }
 
         // Emulate Activity life cycle
