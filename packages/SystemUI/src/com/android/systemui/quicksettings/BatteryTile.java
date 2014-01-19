@@ -31,14 +31,11 @@ public class BatteryTile extends QuickSettingsTile implements BatteryStateChange
 
         mController = controller;
 
-<<<<<<< HEAD
         mOnClick = new View.OnClickListener() {
-=======
         mBatteryLevel = mController.getBatteryLevel();
         mPluggedIn = mController.isBatteryStatusCharging();
 
         mOnClick = new OnClickListener() {
->>>>>>> 284f891... Frameworks: Fix 0% battery QS tile
             @Override
             public void onClick(View v) {
                 startSettingsActivity(Intent.ACTION_POWER_USAGE_SUMMARY);

@@ -487,6 +487,37 @@ public class NavigationBarView extends LinearLayout {
         }
     }
 
+<<<<<<< HEAD
+=======
+    protected void disableCameraByUser() {
+        Resources keyguardResources;
+        PackageManager pm = mContext.getPackageManager();
+        try {
+            keyguardResources = pm.getResourcesForApplication("com.android.keyguard");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        final boolean cameraDefault = keyguardResources.getBoolean(
+                keyguardResources.getIdentifier(
+                "com.android.keyguard:bool/kg_enable_camera_default_widget", null, null));
+
+        final boolean widgetCarousel = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_USE_WIDGET_CONTAINER_CAROUSEL, 0,
+                UserHandle.USER_CURRENT) == 1;
+
+        final boolean cameraWidget = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_CAMERA_WIDGET,
+                cameraDefault ? 1 : 0,
+                UserHandle.USER_CURRENT) == 1;
+
+        mCameraDisabledByUser = !cameraWidget || widgetCarousel;
+    }
+
+>>>>>>> b827d68... fb: disable navigation bar camera button if widget carousel is enabled
     private boolean isCameraDisabledByDpm() {
         final DevicePolicyManager dpm =
                 (DevicePolicyManager) mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
