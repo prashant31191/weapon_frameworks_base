@@ -137,7 +137,6 @@ public class NotificationPanelView extends PanelView {
                         // Pointer is at the handle portion of the view?
                         mGestureStartY > getHeight() - mHandleBarHeight - getPaddingBottom();
                     mOkToFlip = getExpandedHeight() == 0;
-<<<<<<< HEAD
                     if (event.getX(0) > getWidth() * (1.0f - STATUS_BAR_SETTINGS_RIGHT_PERCENTAGE) &&
                             Settings.System.getIntForUser(getContext().getContentResolver(),
                                     Settings.System.QS_QUICK_PULLDOWN, 0, UserHandle.USER_CURRENT) == 1) {
@@ -145,7 +144,6 @@ public class NotificationPanelView extends PanelView {
                     } else if (event.getX(0) < getWidth() * (1.0f - STATUS_BAR_SETTINGS_LEFT_PERCENTAGE) &&
                             Settings.System.getIntForUser(getContext().getContentResolver(),
                                     Settings.System.QS_QUICK_PULLDOWN, 0, UserHandle.USER_CURRENT) == 2) {
-=======
                     int quickPulldownMode = Settings.System.getIntForUser(
                             getContext().getContentResolver(), Settings.System.QS_QUICK_PULLDOWN,
                             0, UserHandle.USER_CURRENT);
@@ -161,7 +159,6 @@ public class NotificationPanelView extends PanelView {
                         flip = true;
                     } else if (quickPulldownMode == 2
                             && mGestureStartX < getWidth() * (1.0f - STATUS_BAR_LEFT_PERCENTAGE)) {
->>>>>>> c9603a5... Return: Smart Pulldown [1/2]
                         flip = true;
                     }
                     break;
