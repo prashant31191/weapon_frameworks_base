@@ -34,15 +34,12 @@ public class QuickSettingsTile implements OnClickListener {
     protected final int mTileLayout;
     protected int mDrawable;
     protected String mLabel;
-<<<<<<< HEAD
-=======
     protected int mTileTextSize;
     protected int mTileTextColor;
     protected int mTileTextPadding;
     protected Drawable mRealDrawable;
     protected boolean mGenericCollapse;
 
->>>>>>> 1b0198b... QuickSettings : Quick Collapse [1/2]
     protected PhoneStatusBar mStatusbarService;
     protected QuickSettingsController mQsc;
     protected SharedPreferences mPrefs;
@@ -140,7 +137,6 @@ public class QuickSettingsTile implements OnClickListener {
     public void onClick(View v) {
         if (mOnClick != null) {
             mOnClick.onClick(v);
-<<<<<<< HEAD
         }
 
         ContentResolver resolver = mContext.getContentResolver();
@@ -148,7 +144,6 @@ public class QuickSettingsTile implements OnClickListener {
                 Settings.System.QS_COLLAPSE_PANEL, 0, UserHandle.USER_CURRENT) == 1;
         if (shouldCollapse) {
             mQsc.mBar.collapseAllPanels(true);
-=======
             v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             boolean shouldCollapse = Settings.System.getIntForUser(mContext.getContentResolver(),
                     Settings.System.QS_COLLAPSE_PANEL, 0, UserHandle.USER_CURRENT) == 1;
@@ -157,7 +152,6 @@ public class QuickSettingsTile implements OnClickListener {
             if (shouldCollapse && mGenericCollapse) {
                 mQsc.mBar.collapseAllPanels(true);
             }
->>>>>>> 1b0198b... QuickSettings : Quick Collapse [1/2]
         }
     }
 }

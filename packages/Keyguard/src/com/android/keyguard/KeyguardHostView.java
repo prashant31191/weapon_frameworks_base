@@ -428,14 +428,11 @@ public class KeyguardHostView extends KeyguardViewBase {
         maybeEnableAddButton();
         checkAppWidgetConsistency();
 
-<<<<<<< HEAD
         // Don't let the user drag the challenge down if widgets are disabled.
         if (mSlidingChallengeLayout != null) {
             mSlidingChallengeLayout.setEnableChallengeDragging(!widgetsDisabled());
         }
 
-=======
->>>>>>> 678d372... fb: Keyguard disable challenge drag down on slimpin/simpuk screen
         // Select the appropriate page
         mSwitchPageRunnable.run();
 

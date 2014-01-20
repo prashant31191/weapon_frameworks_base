@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
- * Copyright (C) 2013 The SlimRoms Project
+ * Copyright (C) 2014 The WeaponX Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 
 package com.android.systemui.quicksettings;
 
-import static com.android.internal.util.slim.QSConstants.TILE_CUSTOM_KEY;
-import static com.android.internal.util.slim.QSConstants.TILE_CUSTOM_DELIMITER;
+import static com.android.internal.util.weaponx.QSConstants.TILE_CUSTOM_KEY;
+import static com.android.internal.util.weaponx.QSConstants.TILE_CUSTOM_DELIMITER;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -35,8 +35,8 @@ import android.view.LayoutInflater;
 import android.util.Log;
 import android.view.View;
 
-import com.android.internal.util.slim.AppHelper;
-import com.android.internal.util.slim.SlimActions;
+import com.android.internal.util.weaponx.AppHelper;
+import com.android.internal.util.weaponx.SlimActions;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QuickSettingsContainerView;
 import com.android.systemui.statusbar.phone.QuickSettingsController;
