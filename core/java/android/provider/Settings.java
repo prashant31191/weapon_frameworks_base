@@ -3037,10 +3037,8 @@ public final class Settings {
         public static final String SCREEN_LOCK_SLIDE_DELAY_TOGGLE = "screen_lock_slide_delay_toggle";
 
         /**
-<<<<<<< HEAD
          * How many ms to delay before enabling the "slide to unlock" screen
          * lock when the screen goes off due to timeout
-=======
          * Contact strings for infinite toggles
          * @hide
          */
@@ -3050,7 +3048,6 @@ public final class Settings {
          * Show icon when stylus is used?
          * 0 = no
          * 1 = yes
->>>>>>> 6d36e8e... Frameworks: Favorite Contact Tile (1/2)
          * @hide
          */
         public static final String SCREEN_LOCK_SLIDE_TIMEOUT_DELAY = "screen_lock_slide_timeout_delay";
