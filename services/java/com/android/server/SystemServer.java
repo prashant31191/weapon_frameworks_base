@@ -28,10 +28,7 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
-<<<<<<< HEAD
 import android.database.Cursor;
-=======
->>>>>>> c4bf638... [1/2] base: Add support for ADB over network
 import android.media.AudioService;
 import android.net.wifi.p2p.WifiP2pService;
 import android.os.Environment;
@@ -112,7 +109,6 @@ class ServerThread {
         }
     }
 
-<<<<<<< HEAD
     private class PerformanceProfileObserver extends ContentObserver {
         private final String mPropName;
         private final String mPropDef;
@@ -139,8 +135,6 @@ class ServerThread {
         }
     }
 
-=======
->>>>>>> c4bf638... [1/2] base: Add support for ADB over network
     public void initAndLoop() {
         EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_SYSTEM_RUN,
             SystemClock.uptimeMillis());

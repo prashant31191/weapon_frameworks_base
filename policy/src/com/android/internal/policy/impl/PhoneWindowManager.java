@@ -120,6 +120,9 @@ import com.android.internal.policy.PolicyManager;
 import com.android.internal.policy.impl.keyguard.KeyguardServiceDelegate;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.telephony.ITelephony;
+import com.android.internal.util.slim.ButtonsConstants;
+import com.android.internal.util.slim.HwKeyHelper;
+import com.android.internal.util.slim.SlimActions;
 import com.android.internal.widget.PointerLocationView;
 
 import java.io.File;
@@ -172,6 +175,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     static public final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
     static public final String SYSTEM_DIALOG_REASON_ASSIST = "assist";
 
+<<<<<<< HEAD
     // Available custom actions to perform on a key press.
     // Must match values for KEY_HOME_LONG_PRESS_ACTION in:
     // core/java/android/provider/Settings.java
@@ -183,6 +187,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int KEY_ACTION_IN_APP_SEARCH = 5;
     private static final int KEY_ACTION_LAUNCH_CAMERA = 6;
 
+=======
+>>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
     // Masks for checking presence of hardware keys.
     // Must match values in core/res/res/values/config.xml
     private static final int KEY_MASK_HOME = 0x01;
@@ -190,7 +196,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int KEY_MASK_MENU = 0x04;
     private static final int KEY_MASK_ASSIST = 0x08;
     private static final int KEY_MASK_APP_SWITCH = 0x10;
+<<<<<<< HEAD
     private static final int KEY_MASK_CAMERA = 0x20;
+=======
+>>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
 
     /**
      * These are the system UI flags that, when changing, can cause the layout
@@ -463,12 +472,23 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mMenuPressed;
     boolean mAppSwitchLongPressed;
     boolean mHomeDoubleTapPending;
+    boolean mMenuPressed;
+    boolean mMenuConsumed;
+    boolean mMenuDoubleTapPending;
+    boolean mBackPressed;
+    boolean mBackConsumed;
+    boolean mBackDoubleTapPending;
+    boolean mAppSwitchPressed;
+    boolean mAppSwitchConsumed;
+    boolean mAppSwitchDoubleTapPending;
+    boolean mAssistPressed;
+    boolean mAssistConsumed;
+    boolean mAssistDoubleTapPending;
     Intent mHomeIntent;
     Intent mCarDockIntent;
     Intent mDeskDockIntent;
     boolean mSearchKeyShortcutPending;
     boolean mConsumeSearchKeyUp;
-    boolean mAssistKeyLongPressed;
 
     // Tracks user-customisable behavior for certain key events
     private int mLongPressOnHomeBehavior = -1;
@@ -507,8 +527,31 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mOverscanRight = 0;
     int mOverscanBottom = 0;
 
+<<<<<<< HEAD
     // What we do when the user double-taps on home
     private int mDoubleTapOnHomeBehavior;
+=======
+    // Custom hardware key rebinding
+    private int mDeviceHardwareKeys;
+    private boolean mDisableVibration;
+
+    // Tracks user-customisable behavior for certain key events
+    private String mPressOnHomeBehavior          = ButtonsConstants.ACTION_NULL;
+    private String mLongPressOnHomeBehavior      = ButtonsConstants.ACTION_NULL;
+    private String mDoubleTapOnHomeBehavior      = ButtonsConstants.ACTION_NULL;
+    private String mPressOnMenuBehavior          = ButtonsConstants.ACTION_NULL;
+    private String mLongPressOnMenuBehavior      = ButtonsConstants.ACTION_NULL;
+    private String mDoubleTapOnMenuBehavior      = ButtonsConstants.ACTION_NULL;
+    private String mPressOnBackBehavior          = ButtonsConstants.ACTION_NULL;
+    private String mLongPressOnBackBehavior      = ButtonsConstants.ACTION_NULL;
+    private String mDoubleTapOnBackBehavior      = ButtonsConstants.ACTION_NULL;
+    private String mPressOnAssistBehavior        = ButtonsConstants.ACTION_NULL;
+    private String mLongPressOnAssistBehavior    = ButtonsConstants.ACTION_NULL;
+    private String mDoubleTapOnAssistBehavior    = ButtonsConstants.ACTION_NULL;
+    private String mPressOnAppSwitchBehavior     = ButtonsConstants.ACTION_NULL;
+    private String mLongPressOnAppSwitchBehavior = ButtonsConstants.ACTION_NULL;
+    private String mDoubleTapOnAppSwitchBehavior = ButtonsConstants.ACTION_NULL;
+>>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
 
     // Screenshot trigger states
     // Time to volume and power must be pressed within this interval of each other.
@@ -530,6 +573,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int BRIGHTNESS_STEPS = 10;
 
     SettingsObserver mSettingsObserver;
+    HwKeySettingsObserver mHwKeySettingsObserver;
     ShortcutManager mShortcutManager;
     PowerManager.WakeLock mBroadcastWakeLock;
     boolean mHavePendingMediaKeyRepeatWithWakeLock;
@@ -668,6 +712,71 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         @Override public void onChange(boolean selfChange) {
             updateSettings();
             updateRotation(false);
+        }
+    }
+
+    class HwKeySettingsObserver extends ContentObserver {
+        HwKeySettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            // Observe all hw key users' changes
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_HOME_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_HOME_LONG_PRESS_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_HOME_DOUBLE_TAP_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_MENU_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_MENU_LONG_PRESS_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_MENU_DOUBLE_TAP_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_ASSIST_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_ASSIST_LONG_PRESS_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_ASSIST_DOUBLE_TAP_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_APP_SWITCH_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_APP_SWITCH_DOUBLE_TAP_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_BACK_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_BACK_LONG_PRESS_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KEY_BACK_DOUBLE_TAP_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HARDWARE_KEY_REBINDING), false, this,
+                    UserHandle.USER_ALL);
+            updateKeyAssignments();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateKeyAssignments();
         }
     }
 
@@ -991,6 +1100,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mContext.getContentResolver(), Settings.Global.DEVICE_PROVISIONED, 0) != 0;
     }
 
+<<<<<<< HEAD
     private void triggerVirtualKeypress(final int keyCode) {
         InputManager im = InputManager.getInstance();
         long now = SystemClock.uptimeMillis();
@@ -1032,12 +1142,51 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     private final Runnable mHomeDoubleTapTimeoutRunnable = new Runnable() {
+=======
+    private final Runnable mDoubleTapTimeoutRunnable = new Runnable() {
+>>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
         @Override
         public void run() {
             if (mHomeDoubleTapPending) {
                 cancelPreloadRecentApps();
                 mHomeDoubleTapPending = false;
-                launchHomeFromHotKey();
+                if (!mPressOnHomeBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                    cancelPreloadRecentApps();
+                }
+                mDisableVibration = maybeDisableVibration(mPressOnHomeBehavior);
+                SlimActions.processAction(mContext, mPressOnHomeBehavior, false);
+            }
+            if (mMenuDoubleTapPending) {
+                mMenuDoubleTapPending = false;
+                if (!mPressOnMenuBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                    cancelPreloadRecentApps();
+                }
+                mDisableVibration = maybeDisableVibration(mPressOnMenuBehavior);
+                SlimActions.processAction(mContext, mPressOnMenuBehavior, false);
+            }
+            if (mBackDoubleTapPending) {
+                mBackDoubleTapPending = false;
+                if (!mPressOnBackBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                    cancelPreloadRecentApps();
+                }
+                mDisableVibration = maybeDisableVibration(mPressOnBackBehavior);
+                SlimActions.processAction(mContext, mPressOnBackBehavior, false);
+            }
+            if (mAppSwitchDoubleTapPending) {
+                mAppSwitchDoubleTapPending = false;
+                if (!mPressOnAppSwitchBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                    cancelPreloadRecentApps();
+                }
+                mDisableVibration = maybeDisableVibration(mPressOnAppSwitchBehavior);
+                SlimActions.processAction(mContext, mPressOnAppSwitchBehavior, false);
+            }
+            if (mAssistDoubleTapPending) {
+                mAssistDoubleTapPending = false;
+                if (!mPressOnAssistBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                    cancelPreloadRecentApps();
+                }
+                mDisableVibration = maybeDisableVibration(mPressOnAssistBehavior);
+                SlimActions.processAction(mContext, mPressOnAssistBehavior, false);
             }
         }
     };
@@ -1103,6 +1252,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         } catch (RemoteException ex) { }
         mSettingsObserver = new SettingsObserver(mHandler);
         mSettingsObserver.observe();
+
+        mDeviceHardwareKeys = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_deviceHardwareKeys);
+
+        if (mDeviceHardwareKeys > 0) {
+            mHwKeySettingsObserver = new HwKeySettingsObserver(mHandler);
+            mHwKeySettingsObserver.observe();
+        }
+
         mShortcutManager = new ShortcutManager(context, mHandler);
         mShortcutManager.observe();
         mUiMode = context.getResources().getInteger(
@@ -1144,6 +1302,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 com.android.internal.R.bool.config_lidControlsSleep);
         mTranslucentDecorEnabled = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_enableTranslucentDecor);
+<<<<<<< HEAD
         mHasRemovableLid = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_hasRemovableLid);
         mBackKillTimeout = mContext.getResources().getInteger(
@@ -1152,6 +1311,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 com.android.internal.R.integer.config_deviceHardwareKeys);
 
         updateKeyAssignments();
+=======
+>>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
 
         // register for dock events
         IntentFilter filter = new IntentFilter();
@@ -1260,6 +1421,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     private void updateKeyAssignments() {
+<<<<<<< HEAD
         final boolean hasMenu = (mDeviceHardwareKeys & KEY_MASK_MENU) != 0;
         final boolean hasHome = (mDeviceHardwareKeys & KEY_MASK_HOME) != 0;
         final boolean hasAssist = (mDeviceHardwareKeys & KEY_MASK_ASSIST) != 0;
@@ -1342,6 +1504,74 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mHasMenuKeyEnabled |= mPressOnAppSwitchBehavior == KEY_ACTION_MENU
                     || mLongPressOnAppSwitchBehavior == KEY_ACTION_MENU;
         }
+=======
+        final boolean noMenu = (mDeviceHardwareKeys & KEY_MASK_MENU) == 0;
+        final boolean noBack = (mDeviceHardwareKeys & KEY_MASK_BACK) == 0;
+        final boolean noHome = (mDeviceHardwareKeys & KEY_MASK_HOME) == 0;
+        final boolean noAssist = (mDeviceHardwareKeys & KEY_MASK_ASSIST) == 0;
+        final boolean noAppSwitch = (mDeviceHardwareKeys & KEY_MASK_APP_SWITCH) == 0;
+
+        // Setup hardware keys
+        boolean keyRebindingDisabled = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.HARDWARE_KEY_REBINDING, 0,
+                UserHandle.USER_CURRENT) == 0;
+
+        // Home button
+        mPressOnHomeBehavior =
+                HwKeyHelper.getPressOnHomeBehavior(
+                        mContext, noHome || keyRebindingDisabled);
+        mLongPressOnHomeBehavior =
+                HwKeyHelper.getLongPressOnHomeBehavior(
+                        mContext, noHome || keyRebindingDisabled);
+        mDoubleTapOnHomeBehavior =
+                HwKeyHelper.getDoubleTapOnHomeBehavior(
+                        mContext, noHome || keyRebindingDisabled);
+
+        // Menu button
+        mPressOnMenuBehavior =
+                HwKeyHelper.getPressOnMenuBehavior(
+                        mContext, noMenu || keyRebindingDisabled);
+        mLongPressOnMenuBehavior =
+                HwKeyHelper.getLongPressOnMenuBehavior(mContext,
+                        noMenu || keyRebindingDisabled, noMenu || !noAssist);
+        mDoubleTapOnMenuBehavior =
+                HwKeyHelper.getDoubleTapOnMenuBehavior(
+                        mContext, noMenu || keyRebindingDisabled);
+
+        // Back button
+        mPressOnBackBehavior =
+                HwKeyHelper.getPressOnBackBehavior(
+                        mContext, noBack || keyRebindingDisabled);
+        mLongPressOnBackBehavior =
+                HwKeyHelper.getLongPressOnBackBehavior(
+                        mContext, noBack || keyRebindingDisabled);
+        mDoubleTapOnBackBehavior =
+                HwKeyHelper.getDoubleTapOnBackBehavior(
+                        mContext, noBack || keyRebindingDisabled);
+
+        // Assist button
+        mPressOnAssistBehavior =
+                HwKeyHelper.getPressOnAssistBehavior(
+                        mContext, noAssist || keyRebindingDisabled);
+        mLongPressOnAssistBehavior =
+                HwKeyHelper.getLongPressOnAssistBehavior(
+                        mContext, noAssist || keyRebindingDisabled);
+        mDoubleTapOnAssistBehavior =
+                HwKeyHelper.getDoubleTapOnAssistBehavior(
+                        mContext, noAssist || keyRebindingDisabled);
+
+        // App switcher button
+        mPressOnAppSwitchBehavior =
+                HwKeyHelper.getPressOnAppSwitchBehavior(
+                        mContext, noAppSwitch || keyRebindingDisabled);
+        mLongPressOnAppSwitchBehavior =
+                HwKeyHelper.getLongPressOnAppSwitchBehavior(
+                        mContext, noAppSwitch || keyRebindingDisabled);
+        mDoubleTapOnAppSwitchBehavior =
+                HwKeyHelper.getDoubleTapOnAppSwitchBehavior(
+                        mContext, noAppSwitch || keyRebindingDisabled);
+>>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
     }
 
     @Override
@@ -2322,7 +2552,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (DEBUG_INPUT) {
             Log.d(TAG, "interceptKeyTi keyCode=" + keyCode + " down=" + down + " repeatCount="
                     + repeatCount + " keyguardOn=" + keyguardOn + " mHomePressed=" + mHomePressed
-                    + " canceled=" + canceled);
+                    + " canceled=" + canceled + " virtualKey=" + virtualKey
+                    + " longPress=" + longPress
+                    + " policyFlags=" + Integer.toHexString(policyFlags));
         }
 
         // If we think we might have a volume down & power/volume-up key chord on the way
@@ -2367,7 +2599,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // it handle it, because that gives us the correct 5 second
         // timeout.
         if (keyCode == KeyEvent.KEYCODE_HOME) {
-
             // If we have released the home key, and didn't do anything else
             // while it was pressed, then it is time to go home!
             if (!down && mHomePressed) {
@@ -2406,15 +2637,32 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
 
                 // Delay handling home if a double-tap is possible.
+<<<<<<< HEAD
                 if (mDoubleTapOnHomeBehavior != KEY_ACTION_NOTHING) {
                     mHandler.removeCallbacks(mHomeDoubleTapTimeoutRunnable); // just in case
+=======
+                if (!virtualKey
+                        && !mDoubleTapOnHomeBehavior.equals(ButtonsConstants.ACTION_NULL)) {
+                    mHandler.removeCallbacks(mDoubleTapTimeoutRunnable); // just in case
+                    mDisableVibration = false; // just in case
+>>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
                     mHomeDoubleTapPending = true;
-                    mHandler.postDelayed(mHomeDoubleTapTimeoutRunnable,
+                    mHandler.postDelayed(mDoubleTapTimeoutRunnable,
                             ViewConfiguration.getDoubleTapTimeout());
                     return -1;
                 }
 
-                // Go home!
+                if (!virtualKey
+                        && !mPressOnHomeBehavior.equals(ButtonsConstants.ACTION_HOME)) {
+                    if (!mPressOnHomeBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                        cancelPreloadRecentApps();
+                    }
+                    mDisableVibration = maybeDisableVibration(mPressOnHomeBehavior);
+                    SlimActions.processAction(mContext, mPressOnHomeBehavior, false);
+                    return -1;
+                }
+
+                // Go home
                 launchHomeFromHotKey();
                 return -1;
             }
@@ -2439,11 +2687,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
             }
 
+<<<<<<< HEAD
             if (!down) {
+=======
+            if (virtualKey && down) {
+                mHomePressed = true;
+                mHomeConsumed = false;
+>>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
                 return -1;
             }
 
             // Remember that home is pressed and handle special actions.
+<<<<<<< HEAD
             if (repeatCount == 0) {
                 mHomePressed = true;
                 if (mHomeDoubleTapPending) {
@@ -2468,6 +2723,37 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     performKeyAction(mLongPressOnHomeBehavior);
                     // Eat the key up event so it won't take us home when the key is released
                     mHomeConsumed = true;
+=======
+            if (down) {
+                if (!mPreloadedRecentApps &&
+                        (mLongPressOnHomeBehavior.equals(ButtonsConstants.ACTION_RECENTS)
+                         || mDoubleTapOnHomeBehavior.equals(ButtonsConstants.ACTION_RECENTS)
+                         || mPressOnHomeBehavior.equals(ButtonsConstants.ACTION_RECENTS))) {
+                    preloadRecentApps();
+                }
+                if (repeatCount == 0) {
+                    mHomePressed = true;
+                    if (mHomeDoubleTapPending) {
+                        mHomeDoubleTapPending = false;
+                        mDisableVibration = false;
+                        mHomeConsumed = true;
+                        mHandler.removeCallbacks(mDoubleTapTimeoutRunnable);
+                        if (!mDoubleTapOnHomeBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                            cancelPreloadRecentApps();
+                        }
+                        SlimActions.processAction(mContext, mDoubleTapOnHomeBehavior, false);
+                    }
+                } else if (longPress) {
+                    if (!keyguardOn
+                            && !mLongPressOnHomeBehavior.equals(ButtonsConstants.ACTION_NULL)) {
+                        if (!mLongPressOnHomeBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                            cancelPreloadRecentApps();
+                        }
+                        performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                        SlimActions.processAction(mContext, mLongPressOnHomeBehavior, false);
+                        mHomeConsumed = true;
+                    }
+>>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
                 }
             }
             return -1;
@@ -2475,6 +2761,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // Hijack modified menu keys for debugging features
             final int chordBug = KeyEvent.META_SHIFT_ON;
 
+<<<<<<< HEAD
             if (virtualKey || keyguardOn) {
                 // Let the app handle the key
                 return 0;
@@ -2538,8 +2825,100 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         cancelPreloadRecentApps();
                     } else if (mLongPressOnMenuBehavior != KEY_ACTION_NOTHING) {
                         return -1;
+=======
+            // If we have released the menu key, and didn't do anything else
+            // while it was pressed, then it is time to process the menu action!
+            if (!down && mMenuPressed) {
+                mMenuPressed = false;
+                if (mMenuConsumed) {
+                    mMenuConsumed = false;
+                    return -1;
+                }
+
+                if (canceled) {
+                    Log.i(TAG, "Ignoring MENU; event canceled.");
+                    return -1;
+                }
+
+                if (mEnableShiftMenuBugReports && (metaState & chordBug) == chordBug) {
+                    Intent intent = new Intent(Intent.ACTION_BUG_REPORT);
+                    mContext.sendOrderedBroadcast(intent, null);
+                    return -1;
+                } else if (SHOW_PROCESSES_ON_ALT_MENU &&
+                        (metaState & KeyEvent.META_ALT_ON) == KeyEvent.META_ALT_ON) {
+                    Intent service = new Intent();
+                    service.setClassName(mContext, "com.android.server.LoadAverageService");
+                    ContentResolver res = mContext.getContentResolver();
+                    boolean shown = Settings.Global.getInt(
+                            res, Settings.Global.SHOW_PROCESSES, 0) != 0;
+                    if (!shown) {
+                        mContext.startService(service);
+                    } else {
+                        mContext.stopService(service);
+>>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
                     }
                 }
+
+                // Delay handling menu if a double-tap is possible.
+                if (!virtualKey
+                        && !mDoubleTapOnMenuBehavior.equals(ButtonsConstants.ACTION_NULL)) {
+                    mHandler.removeCallbacks(mDoubleTapTimeoutRunnable); // just in case
+                    mDisableVibration = false; // just in case
+                    mMenuDoubleTapPending = true;
+                    mHandler.postDelayed(mDoubleTapTimeoutRunnable,
+                            ViewConfiguration.getDoubleTapTimeout());
+                    return -1;
+                }
+
+                if (!virtualKey) {
+                    if (!mPressOnMenuBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                        cancelPreloadRecentApps();
+                    }
+                    mDisableVibration = maybeDisableVibration(mPressOnMenuBehavior);
+                    SlimActions.processAction(mContext, mPressOnMenuBehavior, false);
+                    return -1;
+                }
+            }
+
+            if (virtualKey && down) {
+                mMenuPressed = true;
+                mMenuConsumed = false;
+            } else if (down) {
+                // Remember that menu is pressed and handle special actions.
+                if (!mPreloadedRecentApps &&
+                        (mLongPressOnMenuBehavior.equals(ButtonsConstants.ACTION_RECENTS)
+                         || mDoubleTapOnMenuBehavior.equals(ButtonsConstants.ACTION_RECENTS)
+                         || mPressOnMenuBehavior.equals(ButtonsConstants.ACTION_RECENTS))) {
+                    preloadRecentApps();
+                }
+                if (repeatCount == 0) {
+                    mMenuPressed = true;
+                    if (mMenuDoubleTapPending) {
+                        mMenuDoubleTapPending = false;
+                        mDisableVibration = false;
+                        mMenuConsumed = true;
+                        mHandler.removeCallbacks(mDoubleTapTimeoutRunnable);
+                        if (!mDoubleTapOnMenuBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                            cancelPreloadRecentApps();
+                        }
+                        SlimActions.processAction(mContext, mDoubleTapOnMenuBehavior, false);
+                        return -1;
+                    }
+                } else if (longPress) {
+                    if (!keyguardOn
+                            && !mLongPressOnMenuBehavior.equals(ButtonsConstants.ACTION_NULL)) {
+                        if (!mLongPressOnMenuBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                            cancelPreloadRecentApps();
+                        }
+                        performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                        SlimActions.processAction(mContext, mLongPressOnMenuBehavior, false);
+                        mMenuConsumed = true;
+                        return -1;
+                    }
+                }
+            }
+            if (!virtualKey) {
+                return -1;
             }
         } else if (keyCode == KeyEvent.KEYCODE_SEARCH) {
             if (down) {
@@ -2556,6 +2935,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return 0;
         } else if (keyCode == KeyEvent.KEYCODE_APP_SWITCH) {
+<<<<<<< HEAD
             if (down) {
                 if (!mPreloadedRecentApps && (mPressOnAppSwitchBehavior == KEY_ACTION_APP_SWITCH ||
                         mLongPressOnAppSwitchBehavior == KEY_ACTION_APP_SWITCH)) {
@@ -2582,12 +2962,140 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                     if (!canceled && !keyguardOn) {
                         performKeyAction(mPressOnAppSwitchBehavior);
+=======
+            // If we have released the app switch key, and didn't do anything else
+            // while it was pressed, then it is time to process the app switch action!
+            if (!down && mAppSwitchPressed) {
+                mAppSwitchPressed = false;
+                if (mAppSwitchConsumed) {
+                    mAppSwitchConsumed = false;
+                    return -1;
+                }
+
+                if (canceled) {
+                    Log.i(TAG, "Ignoring APPSWITCH; event canceled.");
+                    return -1;
+                }
+
+                // Delay handling AppSwitch if a double-tap is possible.
+                if (!virtualKey
+                        && !mDoubleTapOnAppSwitchBehavior.equals(ButtonsConstants.ACTION_NULL)) {
+                    mHandler.removeCallbacks(mDoubleTapTimeoutRunnable); // just in case
+                    mDisableVibration = false; // just in case
+                    mAppSwitchDoubleTapPending = true;
+                    mHandler.postDelayed(mDoubleTapTimeoutRunnable,
+                            ViewConfiguration.getDoubleTapTimeout());
+                    return -1;
+                }
+
+                if (!virtualKey) {
+                    if (!mPressOnAppSwitchBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                        cancelPreloadRecentApps();
+                    }
+                    mDisableVibration = maybeDisableVibration(mPressOnAppSwitchBehavior);
+                    SlimActions.processAction(mContext, mPressOnAppSwitchBehavior, false);
+                    return -1;
+                }
+
+                // Nothing happened execute default action
+                SlimActions.processAction(mContext,
+                        HwKeyHelper.getPressOnAppSwitchBehavior(mContext, true), false);
+                return -1;
+            }
+
+            if (virtualKey && down) {
+                mAppSwitchPressed = true;
+                mAppSwitchConsumed = false;
+                return -1;
+            }
+
+            // Remember that AppSwitch is pressed and handle special actions.
+            if (down) {
+                if (!mPreloadedRecentApps &&
+                        (mLongPressOnAppSwitchBehavior.equals(ButtonsConstants.ACTION_RECENTS)
+                         || mDoubleTapOnAppSwitchBehavior.equals(ButtonsConstants.ACTION_RECENTS)
+                         || mPressOnAppSwitchBehavior.equals(ButtonsConstants.ACTION_RECENTS))) {
+                    preloadRecentApps();
+                }
+                if (repeatCount == 0) {
+                    mAppSwitchPressed = true;
+                    if (mAppSwitchDoubleTapPending) {
+                        mAppSwitchDoubleTapPending = false;
+                        mDisableVibration = false;
+                        mAppSwitchConsumed = true;
+                        mHandler.removeCallbacks(mDoubleTapTimeoutRunnable);
+                        if (!mDoubleTapOnAppSwitchBehavior.equals(
+                                ButtonsConstants.ACTION_RECENTS)) {
+                            cancelPreloadRecentApps();
+                        }
+                        SlimActions.processAction(mContext, mDoubleTapOnAppSwitchBehavior, false);
+                    }
+                } else if (longPress) {
+                    if (!keyguardOn
+                            && !mLongPressOnAppSwitchBehavior.equals(
+                                    ButtonsConstants.ACTION_NULL)) {
+                        if (!mLongPressOnAppSwitchBehavior.equals(
+                                ButtonsConstants.ACTION_RECENTS)) {
+                            cancelPreloadRecentApps();
+                        }
+                        performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                        SlimActions.processAction(mContext, mLongPressOnAppSwitchBehavior, false);
+                        mAppSwitchConsumed = true;
+>>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
                     }
                 }
             }
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_ASSIST) {
+            // If we have released the assistant key, and didn't do anything else
+            // while it was pressed, then it is time to process the assistant action!
+            if (!down && mAssistPressed) {
+                mAssistPressed = false;
+                if (mAssistConsumed) {
+                    mAssistConsumed = false;
+                    return -1;
+                }
+
+                if (canceled) {
+                    Log.i(TAG, "Ignoring ASSIST; event canceled.");
+                    return -1;
+                }
+
+                // Delay handling assistant if a double-tap is possible.
+                if (!virtualKey
+                        && !mDoubleTapOnAssistBehavior.equals(ButtonsConstants.ACTION_NULL)) {
+                    mHandler.removeCallbacks(mDoubleTapTimeoutRunnable); // just in case
+                    mDisableVibration = false; // just in case
+                    mAssistDoubleTapPending = true;
+                    mHandler.postDelayed(mDoubleTapTimeoutRunnable,
+                            ViewConfiguration.getDoubleTapTimeout());
+                    return -1;
+                }
+
+                if (!virtualKey) {
+                    if (!mPressOnAssistBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                        cancelPreloadRecentApps();
+                    }
+                    mDisableVibration = maybeDisableVibration(mPressOnAssistBehavior);
+                    SlimActions.processAction(mContext, mPressOnAssistBehavior, false);
+                    return -1;
+                }
+
+                // Nothing happened execute default action
+                SlimActions.processAction(mContext,
+                        HwKeyHelper.getPressOnAssistBehavior(mContext, true), false);
+                return -1;
+            }
+
+            if (virtualKey && down) {
+                mAssistPressed = true;
+                mAssistConsumed = false;
+                return -1;
+            }
+
+            // Remember that assistant key is pressed and handle special actions.
             if (down) {
+<<<<<<< HEAD
                 if (!mPreloadedRecentApps && (mPressOnAssistBehavior == KEY_ACTION_APP_SWITCH ||
                         mLongPressOnAssistBehavior == KEY_ACTION_APP_SWITCH)) {
                     preloadRecentApps();
@@ -2613,6 +3121,35 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                     if (!canceled && !keyguardOn) {
                         performKeyAction(mPressOnAssistBehavior);
+=======
+                if (!mPreloadedRecentApps &&
+                        (mLongPressOnAssistBehavior.equals(ButtonsConstants.ACTION_RECENTS)
+                         || mDoubleTapOnAssistBehavior.equals(ButtonsConstants.ACTION_RECENTS)
+                         || mPressOnAssistBehavior.equals(ButtonsConstants.ACTION_RECENTS))) {
+                    preloadRecentApps();
+                }
+                if (repeatCount == 0) {
+                    mAssistPressed = true;
+                    if (mAssistDoubleTapPending) {
+                        mAssistDoubleTapPending = false;
+                        mDisableVibration = false;
+                        mAssistConsumed = true;
+                        mHandler.removeCallbacks(mDoubleTapTimeoutRunnable);
+                        if (!mDoubleTapOnAssistBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                            cancelPreloadRecentApps();
+                        }
+                        SlimActions.processAction(mContext, mDoubleTapOnAssistBehavior, false);
+                    }
+                } else if (longPress) {
+                    if (!keyguardOn
+                            && !mLongPressOnAssistBehavior.equals(ButtonsConstants.ACTION_NULL)) {
+                        if (!mLongPressOnAssistBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                            cancelPreloadRecentApps();
+                        }
+                        performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                        SlimActions.processAction(mContext, mLongPressOnAssistBehavior, false);
+                        mAssistConsumed = true;
+>>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
                     }
                 }
             }
@@ -2666,6 +3203,80 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT_OR_SELF);
             }
             return -1;
+        } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // If we have released the back key, and didn't do anything else
+            // while it was pressed, then it is time to process the back action!
+            if (!down && mBackPressed) {
+                mBackPressed = false;
+                if (mBackConsumed) {
+                    mBackConsumed = false;
+                    return -1;
+                }
+
+                if (canceled) {
+                    Log.i(TAG, "Ignoring BACK; event canceled.");
+                    return -1;
+                }
+
+                // Delay handling back if a double-tap is possible.
+                if (!virtualKey
+                        && !mDoubleTapOnBackBehavior.equals(ButtonsConstants.ACTION_NULL)) {
+                    mHandler.removeCallbacks(mDoubleTapTimeoutRunnable); // just in case
+                    mDisableVibration = false; // just in case
+                    mBackDoubleTapPending = true;
+                    mHandler.postDelayed(mDoubleTapTimeoutRunnable,
+                            ViewConfiguration.getDoubleTapTimeout());
+                    return -1;
+                }
+
+                if (!virtualKey) {
+                    if (!mPressOnBackBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                        cancelPreloadRecentApps();
+                    }
+                    mDisableVibration = maybeDisableVibration(mPressOnBackBehavior);
+                    SlimActions.processAction(mContext, mPressOnBackBehavior, false);
+                    return -1;
+                }
+            }
+
+            if (virtualKey && down) {
+                mBackPressed = true;
+                mBackConsumed = false;
+            } else if (down) {
+                // Remember that back is pressed and handle special actions.
+                if (!mPreloadedRecentApps &&
+                        (mLongPressOnBackBehavior.equals(ButtonsConstants.ACTION_RECENTS)
+                         || mDoubleTapOnBackBehavior.equals(ButtonsConstants.ACTION_RECENTS)
+                         || mPressOnBackBehavior.equals(ButtonsConstants.ACTION_RECENTS))) {
+                    preloadRecentApps();
+                }
+                if (repeatCount == 0) {
+                    mBackPressed = true;
+                    if (mBackDoubleTapPending) {
+                        mBackDoubleTapPending = false;
+                        mDisableVibration = false;
+                        mBackConsumed = true;
+                        mHandler.removeCallbacks(mDoubleTapTimeoutRunnable);
+                        if (!mDoubleTapOnBackBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                            cancelPreloadRecentApps();
+                        }
+                        SlimActions.processAction(mContext, mDoubleTapOnBackBehavior, false);
+                    }
+                } else if (longPress) {
+                    if (!keyguardOn
+                            && !mLongPressOnBackBehavior.equals(ButtonsConstants.ACTION_NULL)) {
+                        if (!mLongPressOnBackBehavior.equals(ButtonsConstants.ACTION_RECENTS)) {
+                            cancelPreloadRecentApps();
+                        }
+                        performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                        SlimActions.processAction(mContext, mLongPressOnBackBehavior, false);
+                        mBackConsumed = true;
+                    }
+                }
+            }
+            if (!virtualKey) {
+                return -1;
+            }
         }
 
         // Shortcuts are invoked through Search+key, so intercept those here
@@ -2861,6 +3472,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         return false;
     }
 
+<<<<<<< HEAD
     private void launchAssistLongPressAction() {
         sendCloseSystemWindows(SYSTEM_DIALOG_REASON_ASSIST);
 
@@ -2903,6 +3515,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         return mSearchManager;
     }
 
+=======
+>>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
     private void preloadRecentApps() {
         mPreloadedRecentApps = true;
         try {
@@ -2930,21 +3544,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // re-acquire status bar service next time it is needed.
                 mStatusBarService = null;
             }
-        }
-    }
-
-    private void toggleRecentApps() {
-        mPreloadedRecentApps = false; // preloading no longer needs to be canceled
-        sendCloseSystemWindows(SYSTEM_DIALOG_REASON_RECENT_APPS);
-        try {
-            IStatusBarService statusbar = getStatusBarService();
-            if (statusbar != null) {
-                statusbar.toggleRecentApps();
-            }
-        } catch (RemoteException e) {
-            Slog.e(TAG, "RemoteException when showing recent apps", e);
-            // re-acquire status bar service next time it is needed.
-            mStatusBarService = null;
         }
     }
 
@@ -4823,6 +5422,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // and then updates our own bookkeeping based on the now-
                 // current user.
                 mSettingsObserver.onChange(false);
+                if (mHwKeySettingsObserver != null) {
+                    mHwKeySettingsObserver.onChange(false);
+                }
 
                 // force a re-application of focused window sysui visibility.
                 // the window may never have been shown for this user
@@ -5639,8 +6241,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 Settings.Global.ENABLE_ACCESSIBILITY_GLOBAL_GESTURE_ENABLED, 0) == 1;
     }
 
+    private boolean maybeDisableVibration(String action) {
+        return action.equals(ButtonsConstants.ACTION_BACK)
+                || action.equals(ButtonsConstants.ACTION_MENU_BIG)
+                || action.equals(ButtonsConstants.ACTION_HOME)
+                || action.equals(ButtonsConstants.ACTION_SEARCH);
+    }
+
     @Override
     public boolean performHapticFeedbackLw(WindowState win, int effectId, boolean always) {
+        if (mDisableVibration) {
+            mDisableVibration = false;
+            return false;
+        }
         if (!mVibrator.hasVibrator()) {
             return false;
         }
