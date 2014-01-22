@@ -852,11 +852,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mHandler.removeCallbacks(mScreenshotRunnable);
     }
 
-<<<<<<< HEAD
-    private void cancelPendingScreencastChordAction() {
-        mHandler.removeCallbacks(mScreencastRunnable);
-    }
-
     private void interceptRingerChord() {
         if (mVolumeDownKeyTriggered && !mPowerKeyTriggered && mVolumeUpKeyTriggered) {
             final long now = SystemClock.uptimeMillis();
@@ -874,7 +869,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void cancelPendingRingerChordAction() {
         mHandler.removeCallbacks(mRingerChordLongPress);
     }
-=======
+
     private final Runnable mGlobalMenu = new Runnable() {
         @Override
         public void run() {
@@ -882,7 +877,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             showGlobalActionsDialog(false);
         }
     };
->>>>>>> c6add8f... fb: use on virtual POWER_KEY own global menu handling
 
     private final Runnable mPowerLongPress = new Runnable() {
         @Override
@@ -926,7 +920,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     };
 
-<<<<<<< HEAD
     private final Runnable mScreencastRunnable = new Runnable() {
         @Override
         public void run() {
@@ -979,7 +972,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final boolean keyguardLocked = getKeyguardManager().isKeyguardLocked();
         mGlobalActions.showDialog(keyguardLocked, isDeviceProvisioned());
         if (keyguardLocked) {
-=======
+
     void showGlobalActionsDialog(boolean pokeWakeLock) {
         if (mGlobalActions == null) {
             mGlobalActions = new GlobalActions(mContext, mWindowManagerFuncs);
@@ -987,7 +980,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final boolean keyguardShowing = keyguardIsShowingTq();
         mGlobalActions.showDialog(keyguardShowing, isDeviceProvisioned());
         if (keyguardShowing && pokeWakeLock) {
->>>>>>> c6add8f... fb: use on virtual POWER_KEY own global menu handling
             // since it took two seconds of long press to bring this up,
             // poke the wake lock so they have some time to see the dialog.
             mPowerManager.userActivity(SystemClock.uptimeMillis(), false);
