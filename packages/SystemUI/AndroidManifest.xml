@@ -223,7 +223,11 @@
             </intent-filter>
         </activity>
 
+<<<<<<< HEAD
         <!-- WeaponX shortcut picker -->
+=======
+        <!-- Slim shortcut picker -->
+>>>>>>> 5a14de5... SystemUI: Pimp-up Media Tile (1/1)
         <activity
             android:name="com.android.systemui.CreateShortcut"
             android:label="@string/shortcut_picker"
