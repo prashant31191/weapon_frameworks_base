@@ -2169,10 +2169,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mNotificationButton.setVisibility(View.GONE);
             updateCarrierAndWifiLabelVisibility(false);
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (mNotificationShortcutsIsActive) {
                 updateNotificationShortcutsVisibility(true);
             }
             mNotificationButton.setVisibility(View.GONE);
+=======
+            updateNotificationShortcutsVisibility(true);
+>>>>>>> 1a0d100... fb: finally fix carrier lable shows on first boot sometimes
 =======
             updateNotificationShortcutsVisibility(true);
 >>>>>>> 1a0d100... fb: finally fix carrier lable shows on first boot sometimes
