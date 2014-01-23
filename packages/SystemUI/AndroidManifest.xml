@@ -209,8 +209,6 @@
             android:taskAffinity="com.android.systemui.net"
             android:excludeFromRecents="true" />
 
-<<<<<<< HEAD
-=======
         <!-- Music Tile Sleep Timer -->
         <activity
             android:name="com.android.systemui.timedialog.MusicTileTimeDialog"
@@ -225,7 +223,7 @@
             </intent-filter>
         </activity>
 
-        <!-- Slim shortcut picker -->
+        <!-- WeaponX shortcut picker -->
         <activity
             android:name="com.android.systemui.CreateShortcut"
             android:label="@string/shortcut_picker"
@@ -396,7 +394,6 @@
             </intent-filter>
         </activity>
 
->>>>>>> 5a14de5... SystemUI: Pimp-up Media Tile (1/1)
         <!-- platform logo easter egg activity -->
         <activity
             android:name=".DessertCase"
