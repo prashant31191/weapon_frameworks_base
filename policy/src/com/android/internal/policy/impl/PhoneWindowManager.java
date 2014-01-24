@@ -852,6 +852,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mHandler.removeCallbacks(mScreenshotRunnable);
     }
 
+<<<<<<< HEAD
     private void cancelPendingScreencastChordAction() {
         mHandler.removeCallbacks(mScreencastRunnable);
     }
@@ -873,6 +874,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void cancelPendingRingerChordAction() {
         mHandler.removeCallbacks(mRingerChordLongPress);
     }
+=======
+    private final Runnable mGlobalMenu = new Runnable() {
+        @Override
+        public void run() {
+            sendCloseSystemWindows(SYSTEM_DIALOG_REASON_GLOBAL_ACTIONS);
+            showGlobalActionsDialog(false);
+        }
+    };
+>>>>>>> c6add8f... fb: use on virtual POWER_KEY own global menu handling
 
     private final Runnable mPowerLongPress = new Runnable() {
         @Override
@@ -896,7 +906,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     performAuditoryFeedbackForAccessibilityIfNeed();
                 }
                 sendCloseSystemWindows(SYSTEM_DIALOG_REASON_GLOBAL_ACTIONS);
-                showGlobalActionsDialog();
+                showGlobalActionsDialog(true);
                 break;
             case LONG_PRESS_POWER_SHUT_OFF:
             case LONG_PRESS_POWER_SHUT_OFF_NO_CONFIRM:
@@ -916,6 +926,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     };
 
+<<<<<<< HEAD
     private final Runnable mScreencastRunnable = new Runnable() {
         @Override
         public void run() {
@@ -968,6 +979,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final boolean keyguardLocked = getKeyguardManager().isKeyguardLocked();
         mGlobalActions.showDialog(keyguardLocked, isDeviceProvisioned());
         if (keyguardLocked) {
+=======
+    void showGlobalActionsDialog(boolean pokeWakeLock) {
+        if (mGlobalActions == null) {
+            mGlobalActions = new GlobalActions(mContext, mWindowManagerFuncs);
+        }
+        final boolean keyguardShowing = keyguardIsShowingTq();
+        mGlobalActions.showDialog(keyguardShowing, isDeviceProvisioned());
+        if (keyguardShowing && pokeWakeLock) {
+>>>>>>> c6add8f... fb: use on virtual POWER_KEY own global menu handling
             // since it took two seconds of long press to bring this up,
             // poke the wake lock so they have some time to see the dialog.
             mPowerManager.userActivity(SystemClock.uptimeMillis(), false);
@@ -4532,6 +4552,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             case KeyEvent.KEYCODE_POWER: {
+                // If we send a power key event just to show up the global menu
+                // show it up immediatelly and return.
+                // The virtual keypress event can only be called by the system
+                // (in our case navigation bar, navigation ring, quicksettings shorcuts)
+                // so we are safe here and we will not break 3rd party apps.
+                if (down && event.getDeviceId() == KeyCharacterMap.VIRTUAL_KEYBOARD) {
+                    mHandler.post(mGlobalMenu);
+                    return result;
+                }
                 if ((mTopFullscreenOpaqueWindowState != null &&
                         (mTopFullscreenOpaqueWindowState.getAttrs().flags
                         & WindowManager.LayoutParams.PREVENT_POWER_KEY) != 0)) {
