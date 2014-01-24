@@ -54,6 +54,9 @@ final class UiModeManagerService extends IUiModeManager.Stub {
     private static final String TAG = UiModeManager.class.getSimpleName();
     private static final boolean LOG = false;
 
+    private static float LIGHT_CONDITION = 25f;
+    private static float DARK_CONDITION  = 0.25f;
+
     // Enable launching of applications when entering the dock.
     private static final boolean ENABLE_LAUNCH_CAR_DOCK_APP = true;
     private static final boolean ENABLE_LAUNCH_DESK_DOCK_APP = true;
@@ -79,6 +82,12 @@ final class UiModeManagerService extends IUiModeManager.Stub {
     private boolean mComputedNightMode;
     private int mCurUiMode = 0;
     private int mSetUiMode = 0;
+<<<<<<< HEAD
+=======
+    private int mSetUiThemeMode = 0;
+    private boolean mAllowConfigChange = true;
+    private float mCurrentSwitchLevel = DARK_CONDITION;
+>>>>>>> ded44fe... fb: TRDS change auto detect light conditions method
 
     private boolean mHoldingConfiguration = false;
     private Configuration mConfiguration = new Configuration();
@@ -192,6 +201,73 @@ final class UiModeManagerService extends IUiModeManager.Stub {
         mTwilightService.registerListener(mTwilightListener, mHandler);
     }
 
+<<<<<<< HEAD
+=======
+    private void updateUiThemeMode() {
+        mUiThemeAutoMode = Settings.Secure.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.Secure.UI_THEME_AUTO_MODE,
+                0, UserHandle.USER_CURRENT);
+
+        if (mUiThemeAutoMode == 1) {
+            if (!mAttached) {
+                mAttached = true;
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(Intent.ACTION_SCREEN_OFF);
+                filter.addAction(Intent.ACTION_SCREEN_ON);
+                mContext.registerReceiver(mBroadcastReceiver, filter);
+                registerLightSensor();
+            }
+        } else {
+            if (mAttached) {
+                mAttached = false;
+                mContext.unregisterReceiver(mBroadcastReceiver);
+                unregisterLightSensor();
+                mHandler.removeCallbacks(mReleaseUiThemeModeBlock);
+            }
+        }
+
+        if (mUiThemeAutoMode == 2) {
+            updateTwilightThemeAutoMode();
+        }
+
+        synchronized (mLock) {
+            if (mSystemReady) {
+                sendConfigurationLocked();
+            }
+        }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        int type = event.sensor.getType();
+        if (type == Sensor.TYPE_LIGHT) {
+            if (event.values[0] <= mCurrentSwitchLevel) {
+                mCurrentSwitchLevel = LIGHT_CONDITION;
+                mConfiguration.uiThemeMode = Configuration.UI_THEME_MODE_HOLO_DARK;
+            } else {
+                mCurrentSwitchLevel = DARK_CONDITION;
+                mConfiguration.uiThemeMode = Configuration.UI_THEME_MODE_HOLO_LIGHT;
+            }
+
+            if (mAllowConfigChange) {
+                mAllowConfigChange = false;
+                mHandler.postDelayed(mReleaseUiThemeModeBlock, 5000);
+                synchronized (mLock) {
+                    if (mSystemReady) {
+                        sendConfigurationLocked();
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+
+>>>>>>> ded44fe... fb: TRDS change auto detect light conditions method
     @Override // Binder call
     public void disableCarMode(int flags) {
         final long ident = Binder.clearCallingIdentity();
