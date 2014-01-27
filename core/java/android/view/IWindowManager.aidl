@@ -287,9 +287,6 @@ interface IWindowManager
      * @param enabled Whether touch exploration is enabled.
      */
     void setTouchExplorationEnabled(boolean enabled);
-<<<<<<< HEAD
-=======
-
     /**
      * Get the current navigation bar state when expanded desktop is enabled.
      *
@@ -318,5 +315,4 @@ interface IWindowManager
      * @hide
      */
     void toggleGlobalMenu();
->>>>>>> 2d7b1af... fb: handle globalmenu in SlimActions not over Powerbutton anymore
 }
