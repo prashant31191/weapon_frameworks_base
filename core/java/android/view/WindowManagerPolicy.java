@@ -1209,4 +1209,15 @@ public interface WindowManagerPolicy {
      * @return True if navbar can be hidden by immersive mode
      */
     public boolean isImmersiveMode(int vis);
+<<<<<<< HEAD
+=======
+
+    /**
+     * Toggle global menu
+     *
+     * @hide
+     */
+    public void toggleGlobalMenu();
+
+>>>>>>> 2d7b1af... fb: handle globalmenu in SlimActions not over Powerbutton anymore
 }
