@@ -199,16 +199,28 @@ public class UsbDeviceManager {
 
         // We do not show the USB notification if the primary volume supports mass storage, unless
         // persist.sys.usb.config is set to mtp,adb. This will allow the USB notification to show
+<<<<<<< HEAD
         // on devices with mtp as default and mass storage enabled on primary, so the user can choose
+=======
+        // on devices with mtp as default and mass storage enabled on primary, so user can choose
+>>>>>>> da81056... Squash UMS Commits [1/3]
         // between mtp, ptp, and mass storage. The legacy mass storage UI will be used otherwise.
         boolean massStorageSupported = false;
         final StorageManager storageManager = StorageManager.from(mContext);
         final StorageVolume primary = storageManager.getPrimaryVolume();
 
+<<<<<<< HEAD
         if (Settings.Secure.getInt(mContentResolver, Settings.Secure.USB_MASS_STORAGE_ENABLED, 0 ) == 1 ) {
                 massStorageSupported = primary != null && primary.allowMassStorage();
         } else {
                 massStorageSupported = false;
+=======
+        if (Settings.Secure.getInt(mContentResolver,
+                Settings.Secure.USB_MASS_STORAGE_ENABLED, 0 ) == 1 ) {
+            massStorageSupported = primary != null && primary.allowMassStorage();
+        } else {
+            massStorageSupported = false;
+>>>>>>> da81056... Squash UMS Commits [1/3]
         }
 
         if ("mtp,adb".equals(SystemProperties.get("persist.sys.usb.config"))) {
