@@ -1718,6 +1718,11 @@ public class KeyguardHostView extends KeyguardViewBase {
         final boolean homeOverride = Settings.System.getInt(getContext().getContentResolver(),
                 Settings.System.HOME_UNLOCK_SCREEN, 0) == 1;
         return homeOverride;
+        final boolean settingsEnabled = Settings.System.getIntForUser(
+                getContext().getContentResolver(),
+                Settings.System.MENU_UNLOCK_SCREEN, configDisabled ? 0 : 1,
+                UserHandle.USER_CURRENT) == 1;
+        return settingsEnabled || isTestHarness || fileOverride;
     }
 
     public void goToWidget(int appWidgetId) {

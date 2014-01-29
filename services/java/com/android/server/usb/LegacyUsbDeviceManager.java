@@ -199,6 +199,10 @@ public class LegacyUsbDeviceManager extends UsbDeviceManager {
 
         if (volumes.length > 0) {
             if (Settings.Secure.getInt(mContentResolver, Settings.Secure.USB_MASS_STORAGE_ENABLED, 0 ) == 1 ) {
+            if (Settings.Secure.getInt(mContentResolver,
+                    Settings.Secure.USB_MASS_STORAGE_ENABLED, 0 ) == 1 ) {
+            if (Settings.Secure.getInt(mContentResolver,
+                    Settings.Secure.USB_MASS_STORAGE_ENABLED, 0 ) == 1 ) {
                 massStorageSupported = volumes[0].allowMassStorage();
             } else {
                 massStorageSupported = false;
@@ -310,6 +314,7 @@ public class LegacyUsbDeviceManager extends UsbDeviceManager {
                         mConfigured = false;
                     } catch (FileNotFoundException f) {
                         Slog.i(TAG, "This kernel does not have legacy USB configuration switch support");
+                        Slog.i(TAG, "Kernel doesn't have legacy USB config switch support");
                     } catch (Exception f) {
                         Slog.e(TAG, "" , f);
                     }

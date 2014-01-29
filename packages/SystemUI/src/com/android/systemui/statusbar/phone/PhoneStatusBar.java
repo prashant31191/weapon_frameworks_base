@@ -572,8 +572,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mHideLabels = Settings.System.getIntForUser(resolver,
                         Settings.System.NOTIFICATION_HIDE_LABELS, 0, UserHandle.USER_CURRENT);
                 updateCarrierMargin(mHideLabels == 3);
-                mCarrierAndWifiView.setVisibility(
-                        (mHideLabels != 3) ? View.VISIBLE : View.INVISIBLE);
+                if (mHideLabels == 3) {
+                    mCarrierAndWifiViewVisible = false;
+                    mCarrierAndWifiView.setVisibility(View.INVISIBLE);
+                }
+                updateCarrierAndWifiLabelVisibility(false);
             }
             updateBatteryIcons();
         }
@@ -1041,7 +1044,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         updateBatteryIcons();
 
         mNetworkController.setListener(this);
-        updateCarrierAndWifiLabelVisibility(true);
 
         return mStatusBarView;
     }
@@ -1571,9 +1573,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     }
 
-
     protected void updateNotificationShortcutsVisibility(boolean vis, boolean instant) {
-        if (mNotificationShortcutsScrollView == null) {
+        if (mNotificationShortcutsScrollView == null || !mNotificationShortcutsIsActive) {
             return;
         }
         if (DEBUG) {
@@ -2085,9 +2086,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }, FLIP_DURATION - 150);
                 updateCarrierAndWifiLabelVisibility(false);
-                if (mNotificationShortcutsIsActive) {
-                    updateNotificationShortcutsVisibility(true);
-                }
+                updateNotificationShortcutsVisibility(true);
             }
         }, FLIP_DURATION - 150);
         mNotificationPanelIsOpen = true;
@@ -2173,6 +2172,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 updateNotificationShortcutsVisibility(true);
             }
             mNotificationButton.setVisibility(View.GONE);
+            updateNotificationShortcutsVisibility(true);
         } else { // settings side
             mFlipSettingsView.setScaleX(progress);
             mFlipSettingsView.setVisibility(View.VISIBLE);
