@@ -1445,8 +1445,6 @@
          performance profiles  -->
     <string name="config_perf_profile_default_entry" translatable="false"></string>
 
-<<<<<<< HEAD
-=======
     <!-- Force permanent menu key -->
     <bool name="config_force_permanent_menu_key">false</bool>
 
@@ -1462,5 +1460,4 @@
         config to 7. -->
     <integer name="config_deviceHardwareKeys">0</integer>
 
->>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
 </resources>

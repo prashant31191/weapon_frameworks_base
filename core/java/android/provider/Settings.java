@@ -3434,9 +3434,7 @@ public final class Settings {
         public static final String HOME_UNLOCK_SCREEN = "home_unlock_screen";
 
         /**
-<<<<<<< HEAD
          * Whether the lockscreen vibrate should be enabled.
-=======
          * Whether custom hardware key rebinding is enabled
          * @hide
          */
@@ -3562,7 +3560,6 @@ public final class Settings {
          * 6 == Stack (Bottom)
          * 7 == Translate (Left)
          * 8 == Translate (Right)
->>>>>>> 2cfd9aa... [1/2] Slims Hardware Key Rebinding
          * @hide
          */
         public static final String LOCKSCREEN_VIBRATE_ENABLED = "lockscreen.vibrate_enabled";
