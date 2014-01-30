@@ -166,11 +166,7 @@ AssetManager::~AssetManager(void)
     delete[] mVendor;
 }
 
-<<<<<<< HEAD
-bool AssetManager::addAssetPath(const String8& path, void** cookie, bool asSkin)
-=======
 bool AssetManager::addAssetPath(const String8& path, int32_t* cookie)
->>>>>>> e501259... AssetManager cookies should be int32_t and not void*.
 {
     AutoMutex _l(mLock);
 

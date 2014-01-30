@@ -138,6 +138,15 @@ public class Recents extends SystemUI implements RecentsComponent {
                                 R.dimen.status_bar_recents_thumbnail_width);
                     }
                 } else { // if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+<<<<<<< HEAD
+=======
+                    boolean navigationBarCanMove = DeviceUtils.isPhone(mContext) ?
+                            Settings.System.getIntForUser(mContext.getContentResolver(),
+                                Settings.System.NAVIGATION_BAR_CAN_MOVE, 1,
+                                UserHandle.USER_CURRENT) == 1
+                            : false;
+
+>>>>>>> 652c030... fb: Handle navbar heights correct on dpi changes + more (1/2)
                     float thumbTopMargin = res.getDimensionPixelSize(
                             R.dimen.status_bar_recents_thumbnail_top_margin);
                     float thumbBgPadding = res.getDimensionPixelSize(

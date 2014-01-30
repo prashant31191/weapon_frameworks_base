@@ -621,6 +621,7 @@ public class NavigationBarView extends LinearLayout {
     }
 
     public void reorient() {
+<<<<<<< HEAD
         int orientation = mContext.getResources().getConfiguration().orientation;
         mRotatedViews[Configuration.ORIENTATION_PORTRAIT].setVisibility(View.GONE);
         mRotatedViews[Configuration.ORIENTATION_LANDSCAPE].setVisibility(View.GONE);
@@ -630,6 +631,21 @@ public class NavigationBarView extends LinearLayout {
             int rotation = mDisplay.getRotation();
             mVertical = rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270;
             mDelegateHelper.setSwapXY(mVertical);
+=======
+        final int rot = mDisplay.getRotation();
+        for (int i=0; i<4; i++) {
+            mRotatedViews[i].setVisibility(View.GONE);
+        }
+
+        boolean navigationBarCanMove = DeviceUtils.isPhone(mContext) ?
+                Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.NAVIGATION_BAR_CAN_MOVE, 1,
+                        UserHandle.USER_CURRENT) == 1
+                : false;
+
+        if (!navigationBarCanMove) {
+            mCurrentView = mRotatedViews[Surface.ROTATION_0];
+>>>>>>> 652c030... fb: Handle navbar heights correct on dpi changes + more (1/2)
         } else {
             mVertical = getWidth() > 0 && getHeight() > getWidth();
         }

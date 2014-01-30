@@ -94,11 +94,7 @@ public:
      * then on success, *cookie is set to the value corresponding to the
      * newly-added asset source.
      */
-<<<<<<< HEAD
-    bool addAssetPath(const String8& path, void** cookie, bool asSkin=false);
-=======
     bool addAssetPath(const String8& path, int32_t* cookie);
->>>>>>> e501259... AssetManager cookies should be int32_t and not void*.
 
     /*                                                                       
      * Convenience for adding the standard system assets.  Uses the

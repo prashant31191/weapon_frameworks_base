@@ -334,8 +334,65 @@ public class SearchPanelView extends FrameLayout implements
         return configuration.orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 
+<<<<<<< HEAD
     private void updateSettings() {
         mTargetActivities = NavigationRingHelpers.getTargetActions(mContext);
+=======
+    private void setDrawables() {
+        mLongPress = false;
+        mAppIsBinded = false;
+        mSearchPanelLock = false;
+
+        // Custom Targets
+        ArrayList<TargetDrawable> storedDraw = new ArrayList<TargetDrawable>();
+
+        int endPosOffset;
+        int startPosOffset;
+        ButtonConfig buttonConfig;
+
+        boolean navigationBarCanMove = DeviceUtils.isPhone(mContext) ?
+                Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_CAN_MOVE, 1,
+                    UserHandle.USER_CURRENT) == 1
+                : false;
+
+        if (isScreenPortrait() || !navigationBarCanMove) {
+            startPosOffset = 1;
+            endPosOffset = (mButtonsConfig.size()) + 1;
+        } else {
+            //lastly the standard landscape with navbar on right
+            startPosOffset = (Math.min(1, mButtonsConfig.size() / 2)) + 2;
+            endPosOffset = startPosOffset - 1;
+        }
+
+        mIntentList.clear();
+        mLongList.clear();
+
+        // Add Initial Place Holder Targets
+        for (int i = 0; i < startPosOffset; i++) {
+            storedDraw.add(getTargetDrawable("", null));
+            mIntentList.add(ButtonsConstants.ACTION_NULL);
+            mLongList.add(ButtonsConstants.ACTION_NULL);
+        }
+
+        // Add User Targets
+        for (int i = mButtonsConfig.size() - 1; i >= 0; i--) {
+            buttonConfig = mButtonsConfig.get(i);
+            storedDraw.add(getTargetDrawable(
+                buttonConfig.getClickAction(), buttonConfig.getIcon()));
+            mIntentList.add(buttonConfig.getClickAction());
+            mLongList.add(buttonConfig.getLongpressAction());
+        }
+
+        // Add End Place Holder Targets
+        for (int i = 0; i < endPosOffset; i++) {
+            storedDraw.add(getTargetDrawable("", null));
+            mIntentList.add(ButtonsConstants.ACTION_NULL);
+            mLongList.add(ButtonsConstants.ACTION_NULL);
+        }
+
+        mGlowPadView.setTargetResources(storedDraw);
+>>>>>>> 652c030... fb: Handle navbar heights correct on dpi changes + more (1/2)
     }
 
     private class SettingsObserver extends ContentObserver {
