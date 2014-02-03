@@ -1187,6 +1187,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mNavigationBarView.reorient();
         mNavigationBarView.setListeners(mRecentsClickListener,
                 mRecentsPreloadOnTouchListener, mHomeSearchActionListener);
+        View home = mNavigationBarView.getHomeButton();
+        if (home != null) {
+            home.setOnTouchListener(mHomeSearchActionListener);
+        }
+        mNavigationBarView.getSearchLight().setOnTouchListener(mHomeSearchActionListener);
+        setDisableHomeLongpress();
         updateSearchPanel();
     }
 
@@ -3201,6 +3207,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         super.userSwitched(newUserId);
     }
 
+<<<<<<< HEAD
     private void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
         int autoBrightnessSetting = Settings.System.getIntForUser(
@@ -3211,6 +3218,22 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         } else {
             mBrightnessControl = Settings.System.getIntForUser(resolver,
                     Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0, mCurrentUserId) == 1;
+=======
+    private void updateSwapXY() {
+        if (mNavigationBarView != null
+                && mNavigationBarView.mDelegateHelper != null) {
+            boolean navigationBarCanMove = DeviceUtils.isPhone(mContext) ?
+                    Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.NAVIGATION_BAR_CAN_MOVE, 1,
+                        UserHandle.USER_CURRENT) == 1
+                    : false;
+            // if we are in landscape mode and NavBar
+            // can move swap the XY coordinates for NaVRing Swipe
+            mNavigationBarView.mDelegateHelper.setSwapXY(
+                    mContext.getResources().getConfiguration()
+                            .orientation == Configuration.ORIENTATION_LANDSCAPE
+                    && navigationBarCanMove);
+>>>>>>> 652c030... fb: Handle navbar heights correct on dpi changes + more (1/2)
         }
 
         int batteryStyle = Settings.System.getIntForUser(resolver,

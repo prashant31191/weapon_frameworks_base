@@ -26,9 +26,12 @@ import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.hardware.input.InputManager;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Slog;
 import android.view.HapticFeedbackConstants;
 import android.view.InputDevice;
 import android.view.KeyCharacterMap;
@@ -40,6 +43,10 @@ import android.view.ViewConfiguration;
 import android.view.ViewDebug;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
+
+import com.android.internal.statusbar.IStatusBarService;
+import com.android.internal.util.slim.ButtonsConstants;
+import com.android.internal.util.slim.SlimActions;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.NavbarEditor;
@@ -68,6 +75,9 @@ public class KeyButtonView extends ImageView {
     RectF mRect = new RectF();
     AnimatorSet mPressedAnim;
     Animator mAnimateToQuiescent = new ObjectAnimator();
+
+    IStatusBarService mStatusBarService;
+    public static boolean sPreloadedRecentApps;
 
     Runnable mCheckLongPress = new Runnable() {
         public void run() {
@@ -305,6 +315,14 @@ public class KeyButtonView extends ImageView {
                     performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 }
                 if (supportsLongPress()) {
+                if (!sPreloadedRecentApps
+                        && (mClickAction != null
+                                && mClickAction.equals(ButtonsConstants.ACTION_RECENTS)
+                            || mLongpressAction != null
+                                    && mLongpressAction.equals(ButtonsConstants.ACTION_RECENTS))) {
+                    preloadRecentApps();
+                }
+                if (mSupportsLongpress) {
                     removeCallbacks(mCheckLongPress);
                     postDelayed(mCheckLongPress, ViewConfiguration.getLongPressTimeout());
                 }
@@ -325,6 +343,7 @@ public class KeyButtonView extends ImageView {
                 if (supportsLongPress()) {
                     removeCallbacks(mCheckLongPress);
                 }
+                cancelPreloadRecentApps();
                 break;
             case MotionEvent.ACTION_UP:
                 final boolean doIt = isPressed();
@@ -366,5 +385,66 @@ public class KeyButtonView extends ImageView {
                 InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
     }
 }
+    private OnClickListener mClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mClickAction != null
+                    && !mClickAction.equals(ButtonsConstants.ACTION_RECENTS)) {
+                cancelPreloadRecentApps();
+            }
+            SlimActions.processAction(mContext, mClickAction, false);
+            return;
+        }
+    };
 
+    private OnLongClickListener mLongPressListener = new OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            if (mLongpressAction != null
+                    && !mLongpressAction.equals(ButtonsConstants.ACTION_RECENTS)) {
+                cancelPreloadRecentApps();
+            }
+            SlimActions.processAction(mContext, mLongpressAction, true);
+            return true;
+        }
+    };
 
+    private void preloadRecentApps() {
+        sPreloadedRecentApps = true;
+        try {
+            IStatusBarService statusbar = getStatusBarService();
+            if (statusbar != null) {
+                statusbar.preloadRecentApps();
+            }
+        } catch (RemoteException e) {
+            Slog.e(TAG, "RemoteException when preloading recent apps", e);
+            // re-acquire status bar service next time it is needed.
+            mStatusBarService = null;
+        }
+    }
+
+    private void cancelPreloadRecentApps() {
+        if (sPreloadedRecentApps) {
+            sPreloadedRecentApps = false;
+            try {
+                IStatusBarService statusbar = getStatusBarService();
+                if (statusbar != null) {
+                    statusbar.cancelPreloadRecentApps();
+                }
+            } catch (RemoteException e) {
+                Slog.e(TAG, "RemoteException when showing recent apps", e);
+                // re-acquire status bar service next time it is needed.
+                mStatusBarService = null;
+            }
+        }
+    }
+
+    IStatusBarService getStatusBarService() {
+        if (mStatusBarService == null) {
+            mStatusBarService = IStatusBarService.Stub.asInterface(
+                    ServiceManager.getService("statusbar"));
+        }
+        return mStatusBarService;
+    }
+
+}

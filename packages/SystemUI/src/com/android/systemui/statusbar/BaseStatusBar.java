@@ -576,8 +576,26 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         // Provide SearchPanel with a temporary parent to allow layout params to work.
         LinearLayout tmpRoot = new LinearLayout(mContext);
+<<<<<<< HEAD
         mSearchPanelView = (SearchPanelView) LayoutInflater.from(mContext).inflate(
                  R.layout.status_bar_search_panel, tmpRoot, false);
+=======
+
+        boolean navigationBarCanMove = DeviceUtils.isPhone(mContext) ?
+                Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_CAN_MOVE, 1,
+                    UserHandle.USER_CURRENT) == 1
+                : false;
+
+        if (!isScreenPortrait() && !navigationBarCanMove) {
+            mSearchPanelView = (SearchPanelView) LayoutInflater.from(mContext).inflate(
+                    R.layout.status_bar_search_panel_real_landscape, tmpRoot, false);
+        } else {
+            mSearchPanelView = (SearchPanelView) LayoutInflater.from(mContext).inflate(
+                    R.layout.status_bar_search_panel, tmpRoot, false);
+        }
+
+>>>>>>> 652c030... fb: Handle navbar heights correct on dpi changes + more (1/2)
         mSearchPanelView.setOnTouchListener(
                  new TouchOutsideListener(MSG_CLOSE_SEARCH_PANEL, mSearchPanelView));
         mSearchPanelView.setVisibility(View.GONE);
