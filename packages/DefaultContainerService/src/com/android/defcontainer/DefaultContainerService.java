@@ -34,7 +34,6 @@ import android.os.Environment;
 import android.os.Environment.UserEnvironment;
 import android.os.FileUtils;
 import android.os.IBinder;
-import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
 import android.os.RemoteException;
@@ -191,7 +190,6 @@ public class DefaultContainerService extends IntentService {
             ret.versionCode = pkg.versionCode;
             ret.installLocation = pkg.installLocation;
             ret.verifiers = pkg.verifiers;
-            ret.isTheme = pkg.isTheme;
 
             ret.recommendedInstallLocation = recommendAppInstallLocation(pkg.installLocation,
                     packagePath, flags, threshold);
@@ -243,40 +241,6 @@ public class DefaultContainerService extends IntentService {
             }
         }
 
-        /**
-         * List content of the directory and return as marshalled Parcel.
-         * Used for calculating misc size in Settings -> Storage
-         */
-        @Override
-        public byte[] listDirectory(String path) throws RemoteException {
-            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
-
-            final File directory = new File(path);
-            final File[] files = directory.listFiles();
-            final Parcel out = Parcel.obtain();
-
-            if (files == null) {
-                out.writeInt(0);
-            }
-            else {
-                out.writeInt(files.length);
-                for (final File file : files) {
-                    out.writeString(file.getAbsolutePath());
-                    out.writeString(file.getName());
-                    out.writeInt(file.isDirectory() ? 1 : 0);
-                    if (file.isFile()) {
-                        out.writeInt(1);
-                        out.writeLong(file.length());
-                    }
-                    else {
-                        out.writeInt(0);
-                    }
-                }
-            }
-
-            return out.marshall();
-        }
-
         @Override
         public long[] getFileSystemStats(String path) {
             Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
@@ -298,17 +262,6 @@ public class DefaultContainerService extends IntentService {
             final File directory = new File(path);
             if (directory.exists() && directory.isDirectory()) {
                 eraseFiles(directory);
-            }
-        }
-
-        // Same as clearDirectory, but also work for files
-        @Override
-        public void deleteFile(String path) throws RemoteException {
-            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
-
-            final File file = new File(path);
-            if (file.exists()) {
-                eraseFiles(file);
             }
         }
 

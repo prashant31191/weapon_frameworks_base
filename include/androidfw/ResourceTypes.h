@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2005 The Android Open Source Project
- * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +23,6 @@
 #include <androidfw/Asset.h>
 #include <utils/ByteOrder.h>
 #include <utils/Errors.h>
-#include <androidfw/PackageRedirectionMap.h>
 #include <utils/String16.h>
 #include <utils/Vector.h>
 
@@ -1008,6 +1006,15 @@ struct ResTable_config
         uint32_t screenSizeDp;
     };
 
+    enum {
+        // uiThemeMode bits for system theme mode.
+        UI_THEME_MODE_ANY = ACONFIGURATION_UI_THEME_MODE_ANY,
+        UI_THEME_MODE_NORMAL = ACONFIGURATION_UI_THEME_MODE_NORMAL,
+        UI_THEME_MODE_HOLO_DARK = ACONFIGURATION_UI_THEME_MODE_HOLO_DARK,
+        UI_THEME_MODE_HOLO_LIGHT = ACONFIGURATION_UI_THEME_MODE_HOLO_LIGHT,
+    };
+    uint8_t uiThemeMode;
+
     void copyFromDeviceNoSwap(const ResTable_config& o);
     
     void copyFromDtoH(const ResTable_config& o);
@@ -1034,6 +1041,7 @@ struct ResTable_config
         CONFIG_SMALLEST_SCREEN_SIZE = ACONFIGURATION_SMALLEST_SCREEN_SIZE,
         CONFIG_VERSION = ACONFIGURATION_VERSION,
         CONFIG_SCREEN_LAYOUT = ACONFIGURATION_SCREEN_LAYOUT,
+        CONFIG_UI_THEME_MODE = ACONFIGURATION_UI_THEME_MODE,
         CONFIG_UI_MODE = ACONFIGURATION_UI_MODE,
         CONFIG_LAYOUTDIR = ACONFIGURATION_LAYOUTDIR,
     };
@@ -1291,9 +1299,6 @@ public:
                  bool copyData=false, const void* idmap = NULL);
     status_t add(ResTable* src);
 
-    void addRedirections(PackageRedirectionMap* resMap);
-    void clearRedirections();
-
     status_t getError() const;
 
     void uninit();
@@ -1342,8 +1347,6 @@ public:
                              uint32_t* outLastRef = NULL,
                              uint32_t* inoutTypeSpecFlags = NULL,
                              ResTable_config* outConfig = NULL) const;
-
-    uint32_t lookupRedirectionMap(uint32_t resID) const;
 
     enum {
         TMP_BUFFER_SIZE = 16
@@ -1565,7 +1568,6 @@ public:
     // IDMAP_HEADER_SIZE_BYTES) bytes of an idmap file.
     static bool getIdmapInfo(const void* idmap, size_t size,
                              uint32_t* pOriginalCrc, uint32_t* pOverlayCrc);
-    void removeAssetsByCookie(const String8 &packageName, void* cookie);
 
     void print(bool inclValues) const;
     static String8 normalizeForOutput(const char* input);
@@ -1606,11 +1608,6 @@ private:
     // Mapping from resource package IDs to indices into the internal
     // package array.
     uint8_t                     mPackageMap[256];
-
-    // Resource redirection mapping provided by the applied theme (if there is
-    // one).  Resources requested which are found in this map will be
-    // automatically redirected to the appropriate themed value.
-    Vector<PackageRedirectionMap*> mRedirectionMap;
 };
 
 }   // namespace android

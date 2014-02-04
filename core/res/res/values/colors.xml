@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
+/* //device/apps/common/assets/res/any/colors.xml
 **
 ** Copyright 2006, The Android Open Source Project
 **
@@ -211,3 +212,4 @@
     <color name="power_menu_text_default_color">#ffffffff</color>
 
 </resources>
+
