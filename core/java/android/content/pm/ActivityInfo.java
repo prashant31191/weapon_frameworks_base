@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
- * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -377,10 +376,6 @@ public class ActivityInfo extends ComponentInfo
      */
     public static final int CONFIG_ORIENTATION = 0x0080;
     /**
-     * @hide
-     */
-    public static final int CONFIG_THEME_RESOURCE = 0x008000;
-    /**
      * Bit in {@link #configChanges} that indicates that the activity
      * can itself handle changes to the screen layout.  Set from the
      * {@link android.R.attr#configChanges} attribute.
@@ -392,6 +387,13 @@ public class ActivityInfo extends ComponentInfo
      * {@link android.R.attr#configChanges} attribute.
      */
     public static final int CONFIG_UI_MODE = 0x0200;
+    /**
+     * Bit in {@link #configChanges} that indicates that the activity
+     * can itself handle the inverted ui mode. Set from the
+     * {@link android.R.attr#configChanges} attribute.
+     * @hide
+     */
+    public static final int CONFIG_UI_THEME_MODE = 0x0300;
     /**
      * Bit in {@link #configChanges} that indicates that the activity
      * can itself handle the screen size. Set from the
@@ -452,6 +454,7 @@ public class ActivityInfo extends ComponentInfo
         Configuration.NATIVE_CONFIG_NAVIGATION,             // NAVIGATION
         Configuration.NATIVE_CONFIG_ORIENTATION,            // ORIENTATION
         Configuration.NATIVE_CONFIG_SCREEN_LAYOUT,          // SCREEN LAYOUT
+        Configuration.NATIVE_CONFIG_UI_THEME_MODE,          // UI THEME MODE
         Configuration.NATIVE_CONFIG_UI_MODE,                // UI MODE
         Configuration.NATIVE_CONFIG_SCREEN_SIZE,            // SCREEN SIZE
         Configuration.NATIVE_CONFIG_SMALLEST_SCREEN_SIZE,   // SMALLEST SCREEN SIZE

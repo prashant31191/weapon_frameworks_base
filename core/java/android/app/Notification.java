@@ -572,7 +572,6 @@ public class Notification implements Parcelable
      */
     public static final int HEADS_UP_ALLOWED = 1;
 
-
     /**
      * Value for {@link #EXTRA_AS_HEADS_UP}.
      * @hide

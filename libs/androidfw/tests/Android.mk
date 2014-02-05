@@ -4,7 +4,8 @@ include $(CLEAR_VARS)
 
 # Build the unit tests.
 test_src_files := \
-    ObbFile_test.cpp
+    ObbFile_test.cpp \
+    ZipFileRO_test.cpp
 
 shared_libraries := \
     libandroidfw \

@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_ALL_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-permission android:name="android.permission.INJECT_EVENTS" />
     <uses-permission android:name="android.permission.DUMP" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
@@ -18,7 +18,6 @@
     <uses-permission android:name="android.permission.STATUS_BAR" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="android.permission.REMOTE_AUDIO_PLAYBACK" />
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <uses-permission android:name="android.permission.MANAGE_USERS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -31,6 +30,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -74,16 +74,21 @@
     <!-- Keyguard -->
     <uses-permission android:name="android.permission.CONTROL_KEYGUARD" />
 
+    <!-- Wifi Display -->
+    <uses-permission android:name="android.permission.CONFIGURE_WIFI_DISPLAY" />
+
+    <!-- Kill app permission -->
+    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
+
     <!-- Sync -->
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
-    <!-- Development shortcut -->
-    <uses-permission android:name="android.permission.CLEAR_APP_USER_DATA" />
-    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
+    <!-- Reboot -->
+    <uses-permission android:name="android.permission.REBOOT" />
 
-    <!-- Wifi Display -->
-    <uses-permission android:name="android.permission.CONFIGURE_WIFI_DISPLAY" />
+    <!-- Record Audio QuickRecord -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:persistent="true"
@@ -223,7 +228,7 @@
             </intent-filter>
         </activity>
 
-        <!-- WeaponX shortcut picker -->
+        <!-- Slim shortcut picker -->
         <activity
             android:name="com.android.systemui.CreateShortcut"
             android:label="@string/shortcut_picker"

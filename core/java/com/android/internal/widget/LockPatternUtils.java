@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
- * Copyright (C) 2012 The CyanogenMod Project (Calendar)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +18,12 @@ package com.android.internal.widget;
 
 import android.Manifest;
 import android.app.ActivityManagerNative;
-import android.app.Profile;
-import android.app.ProfileManager;
 import android.app.admin.DevicePolicyManager;
 import android.appwidget.AppWidgetManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -36,12 +31,9 @@ import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.storage.IMountService;
-import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.IWindowManager;
 import android.view.View;
@@ -54,10 +46,7 @@ import com.google.android.collect.Lists;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * Utilities for the lock pattern and its settings.
@@ -154,7 +143,6 @@ public class LockPatternUtils {
     public final static String LOCKSCREEN_POWER_BUTTON_INSTANTLY_LOCKS
             = "lockscreen.power_button_instantly_locks";
     public final static String LOCKSCREEN_WIDGETS_ENABLED = "lockscreen.widgets_enabled";
-    public final static String LOCKSCREEN_CAMERA_ENABLED = "lockscreen.camera_enabled";
 
     public final static String PASSWORD_HISTORY_KEY = "lockscreen.passwordhistory";
 
@@ -166,7 +154,6 @@ public class LockPatternUtils {
     private final ContentResolver mContentResolver;
     private DevicePolicyManager mDevicePolicyManager;
     private ILockSettings mLockSettingsService;
-    private ProfileManager mProfileManager;
 
     private final boolean mMultiUserMode;
 
@@ -191,7 +178,6 @@ public class LockPatternUtils {
     public LockPatternUtils(Context context) {
         mContext = context;
         mContentResolver = context.getContentResolver();
-        mProfileManager = (ProfileManager) context.getSystemService(Context.PROFILE_SERVICE);
 
         // If this is being called by the system or by an application like keyguard that
         // has permision INTERACT_ACROSS_USERS, then LockPatternUtils will operate in multi-user
@@ -993,22 +979,6 @@ public class LockPatternUtils {
         setLong(Settings.Secure.LOCK_PATTERN_SIZE, size);
     }
 
-    public void setVisibleDotsEnabled(boolean enabled) {
-        setBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, enabled);
-    }
-
-    public boolean isVisibleDotsEnabled() {
-        return getBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, true);
-    }
-
-    public void setShowErrorPath(boolean enabled) {
-        setBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, enabled);
-    }
-
-    public boolean isShowErrorPath() {
-        return getBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, true);
-    }
-
     /**
      * Set and store the lockout deadline, meaning the user can't attempt his/her unlock
      * pattern until the deadline has passed.
@@ -1292,25 +1262,9 @@ public class LockPatternUtils {
                 || mode == DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC
                 || mode == DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC
                 || mode == DevicePolicyManager.PASSWORD_QUALITY_COMPLEX;
-        final boolean hasPattern = isPattern && isLockPatternEnabled() && savedPatternExists();
-        final boolean hasPassword = isPassword && savedPasswordExists();
-
-        return (hasPattern || hasPassword) &&
-                getActiveProfileLockMode() == Profile.LockMode.DEFAULT;
-    }
-
-    public int getActiveProfileLockMode() {
-        // Check device policy
-        DevicePolicyManager dpm = (DevicePolicyManager)
-                mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
-
-        if (dpm.requireSecureKeyguard(getCurrentOrCallingUserId())) {
-            // Always enforce lock screen
-            return Profile.LockMode.DEFAULT;
-        }
-
-        final Profile profile = mProfileManager.getActiveProfile();
-        return profile.getScreenLockMode();
+        final boolean secure = isPattern && isLockPatternEnabled() && savedPatternExists()
+                || isPassword && savedPasswordExists();
+        return secure;
     }
 
     /**
@@ -1430,31 +1384,6 @@ public class LockPatternUtils {
 
     public void setWidgetsEnabled(boolean enabled, int userId) {
         setBoolean(LOCKSCREEN_WIDGETS_ENABLED, enabled, userId);
-    }
-
-    public boolean getCameraEnabled() {
-        return getCameraEnabled(getCurrentOrCallingUserId());
-    }
-
-    public boolean getCameraEnabled(int userId) {
-        return getBoolean(LOCKSCREEN_CAMERA_ENABLED, true, userId);
-    }
-
-    public void setCameraEnabled(boolean enabled) {
-        setCameraEnabled(enabled, getCurrentOrCallingUserId());
-    }
-
-    public void setCameraEnabled(boolean enabled, int userId) {
-        setBoolean(LOCKSCREEN_CAMERA_ENABLED, enabled, userId);
-    }
-
-    /**
-     * @hide
-     * Set the lock-before-unlock option (show widgets before the secure
-     * unlock screen). See config_enableLockBeforeUnlockScreen
-     */
-    public void setLockBeforeUnlock(boolean enabled) {
-        setBoolean(Settings.Secure.LOCK_BEFORE_UNLOCK, enabled);
     }
 
 }

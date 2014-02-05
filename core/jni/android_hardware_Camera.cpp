@@ -388,7 +388,7 @@ void JNICameraContext::setCallbackMode(JNIEnv *env, bool installed, bool manualM
 static void android_hardware_Camera_setLongshot(JNIEnv *env, jobject thiz, jboolean enable)
 {
     ALOGV("setLongshot");
-#if defined(QCOM_HARDWARE) && !defined(ICS_CAMERA_BLOB)
+#ifdef QCOM_HARDWARE
     JNICameraContext* context;
     status_t rc;
     sp<Camera> camera = get_native_camera(env, thiz, &context);
@@ -409,7 +409,7 @@ static void android_hardware_Camera_setLongshot(JNIEnv *env, jobject thiz, jbool
 static void android_hardware_Camera_sendHistogramData(JNIEnv *env, jobject thiz)
  {
    ALOGV("sendHistogramData" );
-#if defined(QCOM_HARDWARE) && !defined(ICS_CAMERA_BLOB)
+#ifdef QCOM_HARDWARE
    JNICameraContext* context;
    status_t rc;
    sp<Camera> camera = get_native_camera(env, thiz, &context);
@@ -425,7 +425,7 @@ static void android_hardware_Camera_sendHistogramData(JNIEnv *env, jobject thiz)
  static void android_hardware_Camera_setHistogramMode(JNIEnv *env, jobject thiz, jboolean mode)
  {
    ALOGV("setHistogramMode: mode:%d", (int)mode);
-#if defined(QCOM_HARDWARE) && !defined(ICS_CAMERA_BLOB)
+#ifdef QCOM_HARDWARE
    JNICameraContext* context;
    status_t rc;
    sp<Camera> camera = get_native_camera(env, thiz, &context);
@@ -946,16 +946,12 @@ static void android_hardware_Camera_stopFaceDetection(JNIEnv *env, jobject thiz)
 static void android_hardware_Camera_enableFocusMoveCallback(JNIEnv *env, jobject thiz, jint enable)
 {
     ALOGV("enableFocusMoveCallback");
-#ifdef ICS_CAMERA_BLOB
-    return;
-#else
     sp<Camera> camera = get_native_camera(env, thiz, NULL);
     if (camera == 0) return;
 
     if (camera->sendCommand(CAMERA_CMD_ENABLE_FOCUS_MOVE_MSG, enable, 0) != NO_ERROR) {
         jniThrowRuntimeException(env, "enable focus move callback failed");
     }
-#endif
 }
 
 static void android_hardware_Camera_sendRawCommand(JNIEnv *env, jobject thiz, jint arg1, jint arg2, jint arg3)
